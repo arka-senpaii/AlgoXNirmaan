@@ -1230,7 +1230,7 @@
                 <a href="#faq">FAQ</a>
                 <a href="#register" class="btn">Register Now</a>
             </nav>
-            <div class="mobile-menu">
+            <div class="mobile-menu" aria-label="Toggle navigation menu" role="button" tabindex="0">
                 <div></div>
                 <div></div>
                 <div></div>
@@ -1259,7 +1259,7 @@
             <h2 class="countdown-title">Hackathon Starts In</h2>
             <div class="countdown-timer">
                 <div class="countdown-item">
-                    <div class="countdown-value" id="days">00</div>
+                    <div class="countdown-value" id="days">125</div>
                     <div class="countdown-label">Days</div>
                 </div>
                 <div class="countdown-item">
@@ -1708,4 +1708,153 @@
                     </div>
                     <div class="footer-contact">
                         <div class="footer-contact-icon">📍</div>
-                        <div class="footer-contact-text">container {
+                        <div class="footer-contact-text">123 Innovation Drive, Tech City, India</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 AlgoXNirmaan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Countdown Timer Script
+        const countdownDate = new Date("September 6, 2025 09:00:00").getTime();
+
+        const daysEl = document.getElementById("days");
+        const hoursEl = document.getElementById("hours");
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                daysEl.innerHTML = "00";
+                hoursEl.innerHTML = "00";
+                minutesEl.innerHTML = "00";
+                secondsEl.innerHTML = "00";
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysEl.innerHTML = days.toString().padStart(2, "0");
+            hoursEl.innerHTML = hours.toString().padStart(2, "0");
+            minutesEl.innerHTML = minutes.toString().padStart(2, "0");
+            secondsEl.innerHTML = seconds.toString().padStart(2, "0");
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector(".mobile-menu");
+        const navLinks = document.querySelector(".nav-links");
+
+        mobileMenu.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            mobileMenu.classList.toggle("active");
+        });
+
+        // Close mobile menu on nav link click
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                mobileMenu.classList.remove("active");
+            });
+        });
+
+        // Schedule tabs toggle
+        const scheduleTabs = document.querySelectorAll(".schedule-tab");
+        const scheduleDays = document.querySelectorAll(".schedule-day");
+
+        scheduleTabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                scheduleTabs.forEach(t => t.classList.remove("active"));
+                scheduleDays.forEach(day => day.classList.remove("active"));
+
+                tab.classList.add("active");
+                const dayId = tab.getAttribute("data-day");
+                document.getElementById(dayId).classList.add("active");
+            });
+        });
+
+        // FAQ toggle
+        const faqItems = document.querySelectorAll(".faq-item");
+
+        faqItems.forEach(item => {
+            const question = item.querySelector(".faq-question");
+            question.addEventListener("click", () => {
+                item.classList.toggle("active");
+            });
+        });
+
+        // Canvas background animation using Three.js
+        const canvas = document.getElementById("canvas-background");
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const geometry = new THREE.SphereGeometry(1, 32, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0x6c63ff, wireframe: true });
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            sphere.rotation.x += 0.005;
+            sphere.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+    <style>
+        /* Mobile menu overlay */
+        .nav-links.active {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            z-index: 1500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links.active a {
+            font-size: 2rem;
+        }
+
+        .mobile-menu.active div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu.active div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+    </style>
