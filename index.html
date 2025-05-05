@@ -12,6 +12,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        @font-face {
+            font-family: 'SpaceX';
+            src: url('SpaceX.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Tesla';
+            src: url('TESLA.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
             --primary: #6c63ff;
             --secondary: #00c896;
@@ -20,6 +33,17 @@
             --darker: #0a0a0a;
             --light: #f5f5f5;
             --gradient: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        body.light-theme {
+            --primary: #6c63ff;
+            --secondary: #00c896;
+            --accent: #ff5757;
+            --dark: #f5f5f5;
+            --darker: #e0e0e0;
+            --light: #121212;
+            --gradient: linear-gradient(90deg, var(--primary), var(--secondary));
+            background-color: var(--darker);
+            color: var(--light);
         }
 
         * {
@@ -72,7 +96,7 @@
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'SpaceX', sans-serif;
             font-weight: 700;
             font-size: 1.8rem;
             background: var(--gradient);
@@ -196,8 +220,13 @@
             font-weight: 600;
         }
 
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 800;
+            color: var(--light);
+        }
+
         .hero-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'SpaceX', sans-serif;
             font-size: 4.5rem;
             margin-bottom: 20px;
             line-height: 1.1;
@@ -282,11 +311,11 @@
         }
 
         .countdown-title {
-            font-family: 'Orbitron', sans-serif;
             font-size: 2.5rem;
             margin-bottom: 40px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(108, 99, 255, 0.7);
         }
 
         .countdown-timer {
@@ -306,17 +335,19 @@
             font-size: 3.5rem;
             font-weight: 700;
             color: var(--light);
-            background: rgba(108, 99, 255, 0.1);
-            border: 1px solid rgba(108, 99, 255, 0.3);
-            border-radius: 10px;
-            width: 120px;
-            height: 120px;
+            background: rgba(108, 99, 255, 0.15);
+            border: 1px solid rgba(108, 99, 255, 0.5);
+            border-radius: 20px;
+            width: 130px;
+            height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 10px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .countdown-value::before {
@@ -325,15 +356,36 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
+            height: 3px;
             background: var(--gradient);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .countdown-value.animate {
+            animation: pulseGlow 1s ease forwards;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 25px rgba(108, 99, 255, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
+            }
         }
 
         .countdown-label {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
         }
 
         /* ABOUT */
@@ -1215,21 +1267,46 @@
             height: 100%;
             z-index: 1;
         }
+
+        /* Custom thin scrollbar styles */
+        /* For WebKit browsers */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+            box-shadow: 0 0 5px var(--primary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+            box-shadow: 0 0 8px var(--secondary);
+        }
+
     </style>
+    <script src="language-translations.js"></script>
 </head>
 <body>
     <header>
         <div class="header-container">
-            <div class="logo">AlgoX<span style="color: var(--secondary);">Nirmaan</span></div>
+            <div class="logo" data-i18n="logo.text">AlgoX<span style="color: var(--secondary);">Nirmaan</span></div>
             <nav class="nav-links">
-                <a href="#about">About</a>
-                <a href="#tracks">Tracks</a>
-                <a href="#ctf">CTF</a>
-                <a href="#schedule">Schedule</a>
-                <a href="#prizes">Prizes</a>
-                <a href="#faq">FAQ</a>
-                <a href="#register" class="btn">Register Now</a>
+                <a href="#about" data-i18n="nav.about">About</a>
+                <a href="#tracks" data-i18n="nav.tracks">Tracks</a>
+                <a href="#ctf" data-i18n="nav.ctf">CTF</a>
+                <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
+                <a href="#prizes" data-i18n="nav.prizes">Prizes</a>
+                <a href="#faq" data-i18n="nav.faq">FAQ</a>
+                <a href="#register" class="btn" data-i18n="nav.register">Register Now</a>
             </nav>
+           
             <div class="mobile-menu" aria-label="Toggle navigation menu" role="button" tabindex="0">
                 <div></div>
                 <div></div>
@@ -1256,23 +1333,23 @@
 
     <section class="countdown">
         <div class="container countdown-container">
-            <h2 class="countdown-title">Hackathon Starts In</h2>
+        <h2 class="countdown-title" data-i18n="countdown.title">Hackathon Starts In</h2>
             <div class="countdown-timer">
                 <div class="countdown-item">
                     <div class="countdown-value" id="days">125</div>
-                    <div class="countdown-label">Days</div>
+                    <div class="countdown-label" data-i18n="countdown.days">Days</div>
                 </div>
                 <div class="countdown-item">
                     <div class="countdown-value" id="hours">00</div>
-                    <div class="countdown-label">Hours</div>
+                    <div class="countdown-label" data-i18n="countdown.hours">Hours</div>
                 </div>
                 <div class="countdown-item">
                     <div class="countdown-value" id="minutes">00</div>
-                    <div class="countdown-label">Minutes</div>
+                    <div class="countdown-label" data-i18n="countdown.minutes">Minutes</div>
                 </div>
                 <div class="countdown-item">
                     <div class="countdown-value" id="seconds">00</div>
-                    <div class="countdown-label">Seconds</div>
+                    <div class="countdown-label" data-i18n="countdown.seconds">Seconds</div>
                 </div>
             </div>
         </div>
@@ -1280,9 +1357,9 @@
 
     <section class="about" id="about">
         <div class="container about-container">
-            <h2 class="section-title">About The Event</h2>
-            <p class="about-desc">AlgoXNirmaan is a 36-hour hackathon where creativity meets technology. Organized by the Vectorix Community, this event brings together talented individuals to collaborate, innovate, and build solutions to real-world problems. Whether you're a seasoned developer or just starting your tech journey, AlgoXNirmaan offers a platform to showcase your skills, learn from industry experts, and win exciting prizes.</p>
-            <p class="about-desc">This year's hackathon features multiple tracks including AI/ML, Blockchain, IoT, and more. We also have a special Capture The Flag (CTF) competition for cybersecurity enthusiasts. Join us for an action-packed weekend of coding, learning, and networking!</p>
+            <h2 class="section-title" data-i18n="about.title">About The Event</h2>
+            <p class="about-desc" data-i18n="about.desc1">AlgoXNirmaan is a 36-hour hackathon where creativity meets technology. Organized by the Vectorix Community, this event brings together talented individuals to collaborate, innovate, and build solutions to real-world problems. Whether you're a seasoned developer or just starting your tech journey, AlgoXNirmaan offers a platform to showcase your skills, learn from industry experts, and win exciting prizes.</p>
+            <p class="about-desc" data-i18n="about.desc2">This year's hackathon features multiple tracks including AI/ML, Blockchain, IoT, and more. We also have a special Capture The Flag (CTF) competition for cybersecurity enthusiasts. Join us for an action-packed weekend of coding, learning, and networking!</p>
             <div class="stats-container">
                 <div class="stat-item">
                     <div class="stat-value">36</div>
@@ -1307,39 +1384,39 @@
     <section class="tracks" id="tracks">
         <div class="container tracks-container">
             <div class="tracks-header">
-                <h2 class="section-title">Hackathon Tracks</h2>
-                <p class="about-desc">Choose from a variety of cutting-edge tracks and showcase your skills</p>
+                <h2 class="section-title" data-i18n="tracks.title">Hackathon Tracks</h2>
+                <p class="about-desc" data-i18n="tracks.desc">Choose from a variety of cutting-edge tracks and showcase your skills</p>
             </div>
             <div class="tracks-grid">
                 <div class="track-card">
                     <div class="track-icon">🤖</div>
-                    <h3 class="track-title">AI & Machine Learning</h3>
-                    <p class="track-desc">Build intelligent solutions using cutting-edge AI and ML technologies. Create models that solve real-world problems or enhance existing systems.</p>
+                    <h3 class="track-title" data-i18n="tracks.ai.title">AI & Machine Learning</h3>
+                    <p class="track-desc" data-i18n="tracks.ai.desc">Build intelligent solutions using cutting-edge AI and ML technologies. Create models that solve real-world problems or enhance existing systems.</p>
                 </div>
                 <div class="track-card">
                     <div class="track-icon">⛓️</div>
-                    <h3 class="track-title">Blockchain</h3>
-                    <p class="track-desc">Develop decentralized applications, smart contracts, or innovative blockchain solutions that address trust, security, or efficiency challenges.</p>
+                    <h3 class="track-title" data-i18n="tracks.blockchain.title">Blockchain</h3>
+                    <p class="track-desc" data-i18n="tracks.blockchain.desc">Develop decentralized applications, smart contracts, or innovative blockchain solutions that address trust, security, or efficiency challenges.</p>
                 </div>
                 <div class="track-card">
                     <div class="track-icon">🌐</div>
-                    <h3 class="track-title">Web3 & DeFi</h3>
-                    <p class="track-desc">Create next-generation web applications using decentralized technologies, focusing on financial inclusion, transparency, and user control.</p>
+                    <h3 class="track-title" data-i18n="tracks.web3.title">Web3 & DeFi</h3>
+                    <p class="track-desc" data-i18n="tracks.web3.desc">Create next-generation web applications using decentralized technologies, focusing on financial inclusion, transparency, and user control.</p>
                 </div>
                 <div class="track-card">
                     <div class="track-icon">📱</div>
-                    <h3 class="track-title">Mobile & IoT</h3>
-                    <p class="track-desc">Build mobile applications or IoT solutions that connect devices and provide seamless experiences for users in various domains.</p>
+                    <h3 class="track-title" data-i18n="tracks.mobile.title">Mobile & IoT</h3>
+                    <p class="track-desc" data-i18n="tracks.mobile.desc">Build mobile applications or IoT solutions that connect devices and provide seamless experiences for users in various domains.</p>
                 </div>
                 <div class="track-card">
                     <div class="track-icon">🌍</div>
-                    <h3 class="track-title">Sustainability Tech</h3>
-                    <p class="track-desc">Develop solutions that address environmental challenges, promote sustainable practices, or contribute to achieving the UN's Sustainable Development Goals.</p>
+                    <h3 class="track-title" data-i18n="tracks.sustainability.title">Sustainability Tech</h3>
+                    <p class="track-desc" data-i18n="tracks.sustainability.desc">Develop solutions that address environmental challenges, promote sustainable practices, or contribute to achieving the UN's Sustainable Development Goals.</p>
                 </div>
                 <div class="track-card">
                     <div class="track-icon">🔒</div>
-                    <h3 class="track-title">Cybersecurity</h3>
-                    <p class="track-desc">Create tools, applications, or systems that enhance digital security, protect user privacy, or detect and prevent cyber threats.</p>
+                    <h3 class="track-title" data-i18n="tracks.cybersecurity.title">Cybersecurity</h3>
+                    <p class="track-desc" data-i18n="tracks.sustainability.desc">Develop solutions that address environmental challenges, promote sustainable practices, or contribute to achieving the UN's Sustainable Development Goals.</p>
                 </div>
             </div>
         </div>
@@ -1347,35 +1424,33 @@
 
     <section class="ctf" id="ctf">
         <div class="container ctf-container">
-            <h2 class="section-title">Capture The Flag</h2>
+            <h2 class="section-title" data-i18n="nav.ctf">Capture The Flag</h2>
             <div class="ctf-content">
-                <div class="ctf-image">
-                    <img src="/api/placeholder/600/400" alt="CTF Challenge">
-                </div>
+<div id="network-animation" style="width: 600px; height: 400px; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;"></div>
                 <div class="ctf-text">
-                    <h3 class="ctf-title">Test Your Security Skills</h3>
-                    <p class="ctf-desc">Alongside the hackathon, we're hosting an exciting Capture The Flag (CTF) competition for cybersecurity enthusiasts. Put your skills to the test in a series of challenges designed to push your limits.</p>
-                    <p class="ctf-desc">Whether you're a seasoned security professional or just getting started in the field, our CTF challenges offer something for everyone.</p>
+                    <h3 class="ctf-title" data-i18n="ctf.title">Test Your Security Skills</h3>
+                    <p class="ctf-desc" data-i18n="ctf.desc1">Alongside the hackathon, we're hosting an exciting Capture The Flag (CTF) competition for cybersecurity enthusiasts. Put your skills to the test in a series of challenges designed to push your limits.</p>
+                    <p class="ctf-desc" data-i18n="ctf.desc2">Whether you're a seasoned security professional or just getting started in the field, our CTF challenges offer something for everyone.</p>
                     <div class="ctf-features">
                         <div class="ctf-feature">
                             <div class="ctf-feature-icon">🔍</div>
-                            <div class="ctf-feature-text">Web Exploitation</div>
+                            <div class="ctf-feature-text" data-i18n="ctf.feature.web">Web Exploitation</div>
                         </div>
                         <div class="ctf-feature">
                             <div class="ctf-feature-icon">🧩</div>
-                            <div class="ctf-feature-text">Cryptography</div>
+                            <div class="ctf-feature-text" data-i18n="ctf.feature.crypto">Cryptography</div>
                         </div>
                         <div class="ctf-feature">
                             <div class="ctf-feature-icon">🔌</div>
-                            <div class="ctf-feature-text">Binary Exploitation</div>
+                            <div class="ctf-feature-text" data-i18n="ctf.feature.binary">Binary Exploitation</div>
                         </div>
                         <div class="ctf-feature">
                             <div class="ctf-feature-icon">🕵️</div>
-                            <div class="ctf-feature-text">Forensics</div>
+                            <div class="ctf-feature-text" data-i18n="ctf.feature.forensics">Forensics</div>
                         </div>
                     </div>
                     <div style="margin-top: 30px;">
-                        <a href="#register" class="btn">Join CTF Challenge</a>
+                        <a href="#register" class="btn" data-i18n="ctf.join">Join CTF Challenge</a>
                     </div>
                 </div>
             </div>
@@ -1385,12 +1460,12 @@
     <section class="schedule" id="schedule">
         <div class="container schedule-container">
             <div class="schedule-header">
-                <h2 class="section-title">Event Schedule</h2>
-                <p class="about-desc">Plan your 36-hour hackathon journey</p>
+            <h2 class="section-title" data-i18n="nav.schedule">Event Schedule</h2>
+            <p class="about-desc" data-i18n="schedule.desc">Plan your 36-hour hackathon journey</p>
             </div>
             <div class="schedule-tabs">
-                <div class="schedule-tab active" data-day="day1">Day 1 (Sep 6)</div>
-                <div class="schedule-tab" data-day="day2">Day 2 (Sep 7)</div>
+                <div class="schedule-tab active" data-day="day1" data-i18n="schedule.day1">Day 1 (Sep 6)</div>
+                <div class="schedule-tab" data-day="day2" data-i18n="schedule.day2">Day 2 (Sep 7)</div>
             </div>
             <div class="schedule-content">
                 <div class="schedule-day active" id="day1">
@@ -1399,8 +1474,8 @@
                             <div class="schedule-time-value">09:00 AM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Registration & Check-in</div>
-                            <div class="schedule-desc">Pick up your participant kit and get ready for the event</div>
+                            <div class="schedule-event" data-i18n="schedule.registration">Registration & Check-in</div>
+                            <div class="schedule-desc" data-i18n="schedule.registration.desc">Pick up your participant kit and get ready for the event</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1408,8 +1483,8 @@
                             <div class="schedule-time-value">10:00 AM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Opening Ceremony</div>
-                            <div class="schedule-desc">Welcome address, introduction to tracks, sponsors, and judges</div>
+                            <div class="schedule-event" data-i18n="schedule.opening">Opening Ceremony</div>
+                            <div class="schedule-desc" data-i18n="schedule.opening.desc">Welcome address, introduction to tracks, sponsors, and judges</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1417,8 +1492,8 @@
                             <div class="schedule-time-value">11:00 AM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Hackathon Begins</div>
-                            <div class="schedule-desc">Start coding and bringing your ideas to life</div>
+                            <div class="schedule-event" data-i18n="schedule.begin">Hackathon Begins</div>
+                            <div class="schedule-desc" data-i18n="schedule.begin.desc">Start coding and bringing your ideas to life</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1426,8 +1501,8 @@
                             <div class="schedule-time-value">12:30 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Lunch</div>
-                            <div class="schedule-desc">Fuel up for the coding marathon ahead</div>
+                            <div class="schedule-event" data-i18n="schedule.lunch">Lunch</div>
+                            <div class="schedule-desc" data-i18n="schedule.lunch.desc">Fuel up for the coding marathon ahead</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1435,8 +1510,8 @@
                             <div class="schedule-time-value">02:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Tech Talk: Future of AI</div>
-                            <div class="schedule-desc">Industry experts discuss the latest trends in artificial intelligence</div>
+                            <div class="schedule-event" data-i18n="schedule.techtalk">Tech Talk: Future of AI</div>
+                            <div class="schedule-desc" data-i18n="schedule.techtalk.desc">Industry experts discuss the latest trends in artificial intelligence</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1444,8 +1519,8 @@
                             <div class="schedule-time-value">04:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">CTF Challenge Begins</div>
-                            <div class="schedule-desc">Start solving cybersecurity challenges</div>
+                            <div class="schedule-event" data-i18n="schedule.ctfbegin">CTF Challenge Begins</div>
+                            <div class="schedule-desc" data-i18n="schedule.ctfbegin.desc">Start solving cybersecurity challenges</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1453,8 +1528,8 @@
                             <div class="schedule-time-value">07:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Dinner</div>
-                            <div class="schedule-desc">Take a break and enjoy a delicious meal</div>
+                            <div class="schedule-event" data-i18n="schedule.dinner">Dinner</div>
+                            <div class="schedule-desc" data-i18n="schedule.dinner.desc">Take a break and enjoy a delicious meal</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1462,28 +1537,28 @@
                             <div class="schedule-time-value">09:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Mentorship Session</div>
-                            <div class="schedule-desc">Get guidance from industry mentors to refine your project</div>
+                            <div class="schedule-event" data-i18n="schedule.mentorship">Mentorship Session</div>
+                            <div class="schedule-desc" data-i18n="schedule.mentorship.desc">Get guidance from industry mentors to refine your project</div>
                         </div>
                     </div>
                 </div>
                 <div class="schedule-day" id="day2">
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">08:00 AM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event">Breakfast</div>
-                            <div class="schedule-desc">Start your day with a nutritious breakfast</div>
-                        </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">
+                        <div class="schedule-time-value">08:00 AM</div>
                     </div>
+                    <div class="schedule-details">
+                        <div class="schedule-event" data-i18n="schedule.breakfast">Breakfast</div>
+                        <div class="schedule-desc" data-i18n="schedule.breakfast.desc">Start your day with a nutritious breakfast</div>
+                    </div>
+                </div>
                     <div class="schedule-item">
                         <div class="schedule-time">
                             <div class="schedule-time-value">10:00 AM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Workshop: Pitch Perfect</div>
-                            <div class="schedule-desc">Learn how to effectively present your project to judges</div>
+                        <div class="schedule-event" data-i18n="schedule.workshop">Workshop: Pitch Perfect</div>
+                        <div class="schedule-desc" data-i18n="schedule.workshop.desc">Learn how to effectively present your project to judges</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1491,8 +1566,8 @@
                             <div class="schedule-time-value">12:30 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Lunch</div>
-                            <div class="schedule-desc">Final meal before project submission</div>
+                        <div class="schedule-event" data-i18n="schedule.lunch2">Lunch</div>
+                        <div class="schedule-desc" data-i18n="schedule.lunch2.desc">Final meal before project submission</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1500,8 +1575,8 @@
                             <div class="schedule-time-value">03:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">CTF Challenge Ends</div>
-                            <div class="schedule-desc">Final submissions for the cybersecurity competition</div>
+                        <div class="schedule-event" data-i18n="schedule.ctfend">CTF Challenge Ends</div>
+                        <div class="schedule-desc" data-i18n="schedule.ctfend.desc">Final submissions for the cybersecurity competition</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1509,8 +1584,8 @@
                             <div class="schedule-time-value">05:00 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Hackathon Ends</div>
-                            <div class="schedule-desc">Final code submissions and project deployment</div>
+                        <div class="schedule-event" data-i18n="schedule.end">Hackathon Ends</div>
+                        <div class="schedule-desc" data-i18n="schedule.end.desc">Final code submissions and project deployment</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1518,8 +1593,8 @@
                             <div class="schedule-time-value">05:30 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Project Presentations</div>
-                            <div class="schedule-desc">Teams present their projects to judges and audience</div>
+                        <div class="schedule-event" data-i18n="schedule.presentations">Project Presentations</div>
+                        <div class="schedule-desc" data-i18n="schedule.presentations.desc">Teams present their projects to judges and audience</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1527,8 +1602,8 @@
                             <div class="schedule-time-value">07:30 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Award Ceremony</div>
-                            <div class="schedule-desc">Announcement of winners and prize distribution</div>
+                        <div class="schedule-event" data-i18n="schedule.award">Award Ceremony</div>
+                        <div class="schedule-desc" data-i18n="schedule.award.desc">Announcement of winners and prize distribution</div>
                         </div>
                     </div>
                     <div class="schedule-item">
@@ -1536,8 +1611,8 @@
                             <div class="schedule-time-value">08:30 PM</div>
                         </div>
                         <div class="schedule-details">
-                            <div class="schedule-event">Closing Party</div>
-                            <div class="schedule-desc">Celebrate your achievements with music, food, and networking</div>
+                        <div class="schedule-event" data-i18n="schedule.closing">Closing Party</div>
+                        <div class="schedule-desc" data-i18n="schedule.closing.desc">Celebrate your achievements with music, food, and networking</div>
                         </div>
                     </div>
                 </div>
@@ -1548,37 +1623,37 @@
     <section class="prizes" id="prizes">
         <div class="container prizes-container">
             <div class="prizes-header">
-                <h2 class="section-title">Exciting Prizes</h2>
-                <p class="about-desc">Compete for amazing rewards and recognition</p>
+            <h2 class="section-title" data-i18n="nav.prizes">Exciting Prizes</h2>
+            <p class="about-desc" data-i18n="prizes.desc">Compete for amazing rewards and recognition</p>
             </div>
             <div class="prizes-grid">
                 <div class="prize-card">
-                    <div class="prize-position">1st Prize</div>
-                    <div class="prize-amount">₹2,50,000</div>
-                    <p class="prize-desc">Cash prize, mentorship opportunities, and exclusive access to industry events</p>
+                <div class="prize-position" data-i18n="prizes.first.position">1st Prize</div>
+                <div class="prize-amount" data-i18n="prizes.first.amount">₹2,50,000</div>
+                <p class="prize-desc" data-i18n="prizes.first.desc">Cash prize, mentorship opportunities, and exclusive access to industry events</p>
                 </div>
                 <div class="prize-card">
-                    <div class="prize-position">2nd Prize</div>
-                    <div class="prize-amount">₹1,50,000</div>
-                    <p class="prize-desc">Cash prize and advanced tech gadgets for the team</p>
+                <div class="prize-position" data-i18n="prizes.second.position">2nd Prize</div>
+                <div class="prize-amount" data-i18n="prizes.second.amount">₹1,50,000</div>
+                <p class="prize-desc" data-i18n="prizes.second.desc">Cash prize and advanced tech gadgets for the team</p>
                 </div>
                 <div class="prize-card">
-                    <div class="prize-position">3rd Prize</div>
-                    <div class="prize-amount">₹75,000</div>
-                    <p class="prize-desc">Cash prize and software subscriptions for the team</p>
+                <div class="prize-position" data-i18n="prizes.third.position">3rd Prize</div>
+                <div class="prize-amount" data-i18n="prizes.third.amount">₹75,000</div>
+                <p class="prize-desc" data-i18n="prizes.third.desc">Cash prize and software subscriptions for the team</p>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 40px;">
-                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 20px;">Special Prizes</h3>
-                <p class="about-desc">Additional prizes for Best UI/UX, Most Innovative Solution, Best Use of AI, and CTF Winners</p>
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 20px;" data-i18n="prizes.special.title">Special Prizes</h3>
+                <p class="about-desc" data-i18n="prizes.special.desc">Additional prizes for Best UI/UX, Most Innovative Solution, Best Use of AI, and CTF Winners</p>
             </div>
         </div>
     </section>
 
     <section class="sponsors">
         <div class="container sponsors-container">
-            <h2 class="section-title">Our Sponsors</h2>
-            <p class="about-desc">Thanks to our amazing sponsors for making this event possible</p>
+            <h2 class="section-title" data-i18n="nav.sponsors">Our Sponsors</h2>
+            <p class="about-desc" data-i18n="sponsors.desc">Thanks to our amazing sponsors for making this event possible</p>
             <div class="sponsors-grid">
                 <div class="sponsor-item">
                     <img src="/api/placeholder/200/80" alt="Sponsor 1">
@@ -1605,48 +1680,48 @@
     <section class="faq" id="faq">
         <div class="container faq-container">
             <div class="faq-header">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <p class="about-desc">Find answers to common questions about the hackathon</p>
+            <h2 class="section-title" data-i18n="nav.faq">Frequently Asked Questions</h2>
+            <p class="about-desc" data-i18n="faq.desc">Find answers to common questions about the hackathon</p>
             </div>
             <div class="faq-list">
                 <div class="faq-item">
-                    <div class="faq-question">Who can participate in AlgoXNirmaan?</div>
+                    <div class="faq-question" data-i18n="faq.q1">Who can participate in AlgoXNirmaan?</div>
                     <div class="faq-answer">
                         <p>AlgoXNirmaan is open to students, professionals, and tech enthusiasts of all skill levels. You can participate as an individual or form a team of up to 4 members.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">Do I need to have coding experience?</div>
+                    <div class="faq-question" data-i18n="faq.q2">Do I need to have coding experience?</div>
                     <div class="faq-answer">
                         <p>While coding experience is helpful, we welcome participants with diverse skills. Teams typically need a mix of developers, designers, and domain experts. We also have mentors to help you throughout the event.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">Is there a registration fee?</div>
+                    <div class="faq-question" data-i18n="faq.q3">Is there a registration fee?</div>
                     <div class="faq-answer">
                         <p>No, AlgoXNirmaan is completely free to attend. We believe in making tech events accessible to everyone passionate about innovation and problem-solving.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">What should I bring to the hackathon?</div>
+                    <div class="faq-question" data-i18n="faq.q4">What should I bring to the hackathon?</div>
                     <div class="faq-answer">
                         <p>You should bring your laptop, charger, any hardware you might need for your project, and a valid ID. We'll provide food, drinks, and a comfortable workspace throughout the event.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">Will accommodation be provided?</div>
+                    <div class="faq-question" data-i18n="faq.q5">Will accommodation be provided?</div>
                     <div class="faq-answer">
                         <p>We'll provide comfortable resting areas at the venue for participants who want to take short breaks. For those coming from out of town, we have partnered with nearby hotels to offer discounted rates.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">Can I work on a pre-existing project?</div>
+                    <div class="faq-question" data-i18n="faq.q6">Can I work on a pre-existing project?</div>
                     <div class="faq-answer">
                         <p>No, all projects must be built from scratch during the hackathon. However, you can come prepared with ideas and discuss them with your team beforehand.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <div class="faq-question">How does the judging work?</div>
+                    <div class="faq-question" data-i18n="faq.q7">How does the judging work?</div>
                     <div class="faq-answer">
                         <p>Projects will be judged based on innovation, technical complexity, usability, presentation, and relevance to the chosen track. Our panel of judges includes industry experts, tech leaders, and representatives from our sponsor companies.</p>
                     </div>
@@ -1657,63 +1732,63 @@
 
     <section class="register" id="register">
         <div class="container register-container">
-            <h2 class="register-title">Ready to Hack?</h2>
-            <p class="register-desc">Register now and secure your spot at AlgoXNirmaan. Join hundreds of innovators for an epic 36-hour coding adventure!</p>
-            <a href="#" class="btn register-btn">Register for AlgoXNirmaan</a>
+            <h2 class="register-title" data-i18n="nav.register">Ready to Hack?</h2>
+            <p class="register-desc" data-i18n="register.desc">Register now and secure your spot at AlgoXNirmaan. Join hundreds of innovators for an epic 36-hour coding adventure!</p>
+            <a href="#" class="btn register-btn" data-i18n="register.btn">Register for AlgoXNirmaan</a>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <div class="footer-container">
-                <div>
-                    <div class="footer-logo">AlgoXNirmaan</div>
-                    <p class="footer-desc">A 36-hour hackathon presented by Vectorix Community to foster innovation and technological advancement.</p>
-                    <div class="footer-social">
-                        <a href="#">📱</a>
-                        <a href="#">💻</a>
-                        <a href="#">📧</a>
-                        <a href="#">📸</a>
-                    </div>
+            <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px;">
+                <div style="flex: 1 1 250px; min-width: 250px;">
+            <h2 class="footer-logo" style="font-size: 1.8rem; font-weight: 700;" data-i18n="footer.logo">AlgoXNirmaan</h2>
+            <p class="footer-desc" data-i18n="footer.desc">A 36-hour hackathon presented by Vectorix Community to foster innovation and technological advancement.</p>
+            <div class="footer-social" style="display: flex; gap: 15px; margin-top: 15px;">
+                <a href="#" aria-label="Phone" title="Phone" data-i18n="footer.social.phone" style="font-size: 1.5rem;">📱</a>
+                <a href="#" aria-label="Laptop" title="Laptop" data-i18n="footer.social.laptop" style="font-size: 1.5rem;">💻</a>
+                <a href="#" aria-label="Email" title="Email" data-i18n="footer.social.email" style="font-size: 1.5rem;">📧</a>
+                <a href="#" aria-label="Instagram" title="Instagram" data-i18n="footer.social.instagram" style="font-size: 1.5rem;">📸</a>
+            </div>
                 </div>
-                <div>
-                    <h3 class="footer-title">Quick Links</h3>
+                <div style="flex: 1 1 150px; min-width: 150px;">
+                    <h3 class="footer-title" data-i18n="footer.quicklinks">Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#tracks">Tracks</a></li>
-                        <li><a href="#ctf">CTF</a></li>
-                        <li><a href="#schedule">Schedule</a></li>
+                        <li><a href="#home" data-i18n="footer.home">Home</a></li>
+                        <li><a href="#about" data-i18n="footer.about">About</a></li>
+                        <li><a href="#tracks" data-i18n="footer.tracks">Tracks</a></li>
+                        <li><a href="#ctf" data-i18n="footer.ctf">CTF</a></li>
+                        <li><a href="#schedule" data-i18n="footer.schedule">Schedule</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h3 class="footer-title">Resources</h3>
+                <div style="flex: 1 1 150px; min-width: 150px;">
+                    <h3 class="footer-title" data-i18n="footer.resources">Resources</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Code of Conduct</a></li>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Sponsorship</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#" data-i18n="footer.codeOfConduct">Code of Conduct</a></li>
+                        <li><a href="#" data-i18n="footer.faqs">FAQs</a></li>
+                        <li><a href="#" data-i18n="footer.sponsorship">Sponsorship</a></li>
+                        <li><a href="#" data-i18n="footer.privacyPolicy">Privacy Policy</a></li>
+                        <li><a href="#" data-i18n="footer.termsConditions">Terms & Conditions</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h3 class="footer-title">Contact Us</h3>
+                <div style="flex: 1 1 250px; min-width: 250px;">
+                    <h3 class="footer-title" data-i18n="footer.contactus">Contact Us</h3>
                     <div class="footer-contact">
-                        <div class="footer-contact-icon">📧</div>
-                        <div class="footer-contact-text">info@algoxnirmaan.com</div>
+                        <div class="footer-contact-icon" aria-hidden="true">📧</div>
+                        <div class="footer-contact-text" data-i18n="footer.contact.email">info@algoxnirmaan.com</div>
                     </div>
                     <div class="footer-contact">
-                        <div class="footer-contact-icon">📱</div>
-                        <div class="footer-contact-text">+91 9876543210</div>
+                        <div class="footer-contact-icon" aria-hidden="true">📱</div>
+                        <div class="footer-contact-text" data-i18n="footer.contact.phone">+91 9876543210</div>
                     </div>
                     <div class="footer-contact">
-                        <div class="footer-contact-icon">📍</div>
-                        <div class="footer-contact-text">123 Innovation Drive, Tech City, India</div>
+                        <div class="footer-contact-icon" aria-hidden="true">📍</div>
+                        <div class="footer-contact-text" data-i18n="footer.contact.address">123 Innovation Drive, Tech City, India</div>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p class="footer-copyright">© 2025 AlgoXNirmaan. All rights reserved.</p>
+            <div class="footer-bottom" style="margin-top: 40px;">
+                <p class="footer-copyright" data-i18n="footer.copyright">© 2025 AlgoXNirmaan. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -1810,10 +1885,56 @@
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
 
+        // Additional 3D models
+        const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00c896, wireframe: true });
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set(-2, 0, 0);
+        scene.add(cube);
+
+        const torusGeometry = new THREE.TorusGeometry(0.7, 0.2, 16, 100);
+        const torusMaterial = new THREE.MeshBasicMaterial({ color: 0xff5757, wireframe: true });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        torus.position.set(2, 0, 0);
+        scene.add(torus);
+
+        // Add lights for new models
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        });
+
         function animate() {
             requestAnimationFrame(animate);
+
+            targetX = (mouseX / windowHalfX) * 0.5; // parallax intensity X
+            targetY = (mouseY / windowHalfY) * 0.5; // parallax intensity Y
+
+            // Apply parallax effect by adjusting camera position smoothly
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (-targetY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
             sphere.rotation.x += 0.005;
             sphere.rotation.y += 0.01;
+
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            torus.rotation.x += 0.015;
+            torus.rotation.y += 0.015;
+
             renderer.render(scene, camera);
         }
 
@@ -1825,36 +1946,259 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
-    <style>
-        /* Mobile menu overlay */
-        .nav-links.active {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 100%;
-            background: rgba(18, 18, 18, 0.95);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            z-index: 1500;
-            transition: opacity 0.3s ease;
-        }
+    <script>
+        // 3D Computer Network Visualization in CTF section using Three.js
+        (function() {
+            const container = document.getElementById('network-animation');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
 
-        .nav-links.active a {
-            font-size: 2rem;
-        }
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            camera.position.z = 10;
 
-        .mobile-menu.active div:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
 
-        .mobile-menu.active div:nth-child(2) {
-            opacity: 0;
-        }
+            // Add lights for illumination
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // soft white light
+            scene.add(ambientLight);
 
-        .mobile-menu.active div:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-    </style>
+            const pointLight = new THREE.PointLight(0x00c896, 1.5, 50);
+            pointLight.position.set(0, 0, 10);
+            scene.add(pointLight);
+
+            // Create nodes (computers)
+            const nodeCount = 20;
+            const nodes = [];
+            const nodeGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+            const nodeMaterial = new THREE.MeshStandardMaterial({ color: 0x00c896, emissive: 0x00ffb3, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.7 });
+
+            for (let i = 0; i < nodeCount; i++) {
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                // Position nodes randomly in a sphere shell above the globe
+                const phi = Math.acos(2 * Math.random() - 1);
+                const theta = 2 * Math.PI * Math.random();
+                const radius = 5 + Math.random() * 1.5; // radius larger than globe radius to keep nodes above
+                node.position.set(
+                    radius * Math.sin(phi) * Math.cos(theta),
+                    radius * Math.sin(phi) * Math.sin(theta),
+                    radius * Math.cos(phi)
+                );
+                scene.add(node);
+                nodes.push(node);
+            }
+
+            // Create globe wireframe
+            const globeGeometry = new THREE.SphereGeometry(4.5, 64, 64); // smaller radius to keep nodes above
+            const globeMaterial = new THREE.MeshBasicMaterial({ color: 0x6c63ff, wireframe: true, opacity: 0.2, transparent: true });
+            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            scene.add(globe);
+
+            // Create lines (connections) between nodes
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6c63ff, opacity: 0.5, transparent: true });
+            const lines = [];
+            const connections = []; // Store pairs of connected node indices
+
+            for (let i = 0; i < nodeCount; i++) {
+                for (let j = i + 1; j < nodeCount; j++) {
+                    if (Math.random() < 0.15) { // 15% chance to connect nodes
+                        const points = [];
+                        points.push(nodes[i].position);
+                        points.push(nodes[j].position);
+                        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                        const line = new THREE.Line(geometry, lineMaterial);
+                        scene.add(line);
+                        lines.push(line);
+                        connections.push([i, j]);
+                    }
+                }
+            }
+
+            // Create packets that travel along connections
+            const packetGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+            const packetMaterial = new THREE.MeshStandardMaterial({ color: 0xff5757, emissive: 0xff5757, emissiveIntensity: 0.9, roughness: 0.2, metalness: 0.8 });
+            const packets = [];
+
+            // Function to create a packet traveling from nodeA to nodeB
+            function createPacket(nodeAIndex, nodeBIndex) {
+                const packet = new THREE.Mesh(packetGeometry, packetMaterial);
+                packet.userData = {
+                    start: nodes[nodeAIndex].position.clone(),
+                    end: nodes[nodeBIndex].position.clone(),
+                    progress: 0,
+                    speed: 0.01 + Math.random() * 0.02
+                };
+                packet.position.copy(packet.userData.start);
+                scene.add(packet);
+                packets.push(packet);
+            }
+
+            // Periodically send packets between connected nodes
+            setInterval(() => {
+                if (connections.length > 0) {
+                    const conn = connections[Math.floor(Math.random() * connections.length)];
+                    createPacket(conn[0], conn[1]);
+                }
+            }, 500);
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                // Rotate the whole scene slowly
+                scene.rotation.y += 0.002;
+                scene.rotation.x += 0.001;
+
+                // Rotate globe slightly faster for effect
+                globe.rotation.y += 0.003;
+                globe.rotation.x += 0.0015;
+
+                // Nodes pulse animation with emissive intensity modulation
+                nodes.forEach((node, idx) => {
+                    const scale = 1 + 0.3 * Math.sin(Date.now() * 0.002 + idx);
+                    node.scale.set(scale, scale, scale);
+                    const emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005 + idx);
+                    node.material.emissiveIntensity = emissiveIntensity;
+                });
+
+                // Update packets position
+                for (let i = packets.length - 1; i >= 0; i--) {
+                    const packet = packets[i];
+                    packet.userData.progress += packet.userData.speed;
+                    if (packet.userData.progress >= 1) {
+                        // Remove packet from scene and array
+                        scene.remove(packet);
+                        packets.splice(i, 1);
+                    } else {
+                        // Linear interpolation between start and end
+                        packet.position.lerpVectors(packet.userData.start, packet.userData.end, packet.userData.progress);
+                    }
+                }
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth;
+                const newHeight = container.clientHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
+        })();
+    </script>
+    <script>
+        // Anime.js animations for page elements
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Hero section animations
+            anime.timeline()
+                .add({
+                    targets: '.hero-date',
+                    translateY: [-50, 0],
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                    duration: 1000,
+                    delay: 200
+                })
+                .add({
+                    targets: '.hero-subtitle',
+                    translateX: [-100, 0],
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                    duration: 1000,
+                    offset: '-=700'
+                })
+                .add({
+                    targets: '.hero-title',
+                    translateY: [50, 0],
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                    duration: 1200,
+                    offset: '-=700'
+                })
+                .add({
+                    targets: '.hero-desc',
+                    translateX: [100, 0],
+                    opacity: [0, 1],
+                    easing: 'easeOutExpo',
+                    duration: 1000,
+                    offset: '-=900'
+                })
+                .add({
+                    targets: '.hero-btns .btn',
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    delay: anime.stagger(150),
+                    easing: 'easeOutBack',
+                    duration: 800,
+                    offset: '-=800'
+                });
+
+            // Navigation links fade in
+            anime({
+                targets: '.nav-links a',
+                translateY: [-20, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(100, { start: 1000 }),
+                easing: 'easeOutExpo',
+                duration: 800
+            });
+
+            // Button hover animation using anime.js
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: button,
+                        scale: 1.05,
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+                button.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: button,
+                        scale: 1,
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+
+            // Scroll animations for sections
+            const sections = document.querySelectorAll('section');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.2
+            };
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            easing: 'easeOutExpo',
+                            duration: 1000,
+                            delay: 100
+                        });
+                        sectionObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                section.style.opacity = 0;
+                sectionObserver.observe(section);
+            });
+        });
+    </script>
+    <script>
+
