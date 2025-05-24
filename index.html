@@ -1,2328 +1,983 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlgoXNirmaan Hackathon | Presented by Vectorix Community</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        @font-face {
-            font-family: 'SpaceX';
-            src: url('SpaceX.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Tesla';
-            src: url('TESLA.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        :root {
-            --primary: #6c63ff;
-            --secondary: #00c896;
-            --accent: #ff5757;
-            --dark: #121212;
-            --darker: #0a0a0a;
-            --light: #f5f5f5;
-            --gradient: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-        /* Fallback for browsers that do not support CSS variables */
-        body {
-            background-color: #0a0a0a;
-            color: #f5f5f5;
-        }
-        body.light-theme {
-            --primary: #6c63ff;
-            --secondary: #00c896;
-            --accent: #ff5757;
-            --dark: #f5f5f5;
-            --darker: #e0e0e0;
-            --light: #121212;
-            --gradient: linear-gradient(90deg, var(--primary), var(--secondary));
-            background-color: var(--darker);
-            color: var(--light);
-        }
-        /* Fallback for light theme */
-        body.light-theme {
-            background-color: #e0e0e0;
-            color: #121212;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--darker);
-            color: var(--light);
-            overflow-x: hidden;
-        }
-
-        section {
-            min-height: 100vh;
-            padding: 100px 0;
-            position: relative;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* HEADER */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 0;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 10, 10, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        /* Fallback for backdrop-filter */
-        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
-            header {
-                background: rgba(10, 10, 10, 0.95);
-            }
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-family: 'SpaceX', sans-serif;
-            font-weight: 700;
-            font-size: 1.8rem;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: var(--light);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-
-        .btn {
-            background: var(--gradient);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            font-size: 1rem;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-        }
-
-        .btn:hover::before {
-            animation: shine 1.5s infinite;
-        }
-
-        @keyframes shine {
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        .mobile-menu {
-            display: none;
-            cursor: pointer;
-        }
-
-        .mobile-menu div {
-            width: 25px;
-            height: 3px;
-            background-color: var(--light);
-            margin: 5px;
-            transition: all 0.3s ease;
-        }
-
-        /* HERO SECTION */
-        .hero {
-            background: var(--darker);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            padding-top: 150px;
-            padding-bottom: 100px;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-        }
-
-        .hero-subtitle {
-            font-family: 'Space Grotesk', sans-serif;
-            color: var(--secondary);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 800;
-            color: var(--light);
-        }
-
-        .hero-title {
-            font-family: 'SpaceX', sans-serif;
-            font-size: 4.5rem;
-            margin-bottom: 20px;
-            line-height: 1.1;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero-desc {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--secondary);
-            border: 2px solid var(--secondary);
-        }
-
-        .hero-date {
-            display: inline-block;
-            background: rgba(0, 200, 150, 0.1);
-            color: var(--secondary);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            border: 1px solid rgba(0, 200, 150, 0.3);
-        }
-
-        .hero-graphic {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--primary);
-            opacity: 0.2;
-        }
-
-        /* COUNTDOWN */
-        .countdown {
-            background: var(--dark);
-            padding: 60px 0;
-            text-align: center;
-            position: relative;
-            min-height: auto;
-        }
-
-        .countdown::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1600/900') center/cover no-repeat;
-            opacity: 0.1;
-            z-index: 0;
-        }
-
-        .countdown-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        .countdown-title {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 8px rgba(108, 99, 255, 0.7);
-        }
-
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .countdown-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--light);
-            background: rgba(108, 99, 255, 0.15);
-            border: 1px solid rgba(108, 99, 255, 0.5);
-            border-radius: 20px;
-            width: 130px;
-            height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .countdown-value::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 20px 20px 0 0;
-        }
-
-        .countdown-value.animate {
-            animation: pulseGlow 1s ease forwards;
-        }
-
-        @keyframes pulseGlow {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 0 25px rgba(108, 99, 255, 0.8);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
-            }
-        }
-
-        .countdown-label {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
-        }
-
-        /* ABOUT */
-        .about {
-            background: var(--darker);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::before {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--gradient);
-            border-radius: 50px;
-        }
-
-        .about-desc {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-        }
-
-        .stats-container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 60px;
-        }
-
-        .stat-item {
-            flex: 1;
-            padding: 20px;
-            background: rgba(108, 99, 255, 0.1);
-            border-radius: 10px;
-            margin: 0 10px;
-            border: 1px solid rgba(108, 99, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.2);
-        }
-
-        .stat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* TRACKS */
-        .tracks {
-            background: var(--dark);
-            position: relative;
-        }
-
-        .tracks::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1600/900') center/cover no-repeat;
-            opacity: 0.05;
-            z-index: 0;
-        }
-
-        .tracks-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        .tracks-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .tracks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .track-card {
-            background: rgba(18, 18, 18, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-        }
-
-        .track-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: var(--gradient);
-        }
-
-        .track-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(108, 99, 255, 0.3);
-        }
-
-        .track-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .track-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--light);
-        }
-
-        .track-desc {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* CTF SECTION */
-        .ctf {
-            background: var(--darker);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ctf-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .ctf-content {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            margin-top: 50px;
-        }
-
-        .ctf-image {
-            flex: 1;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .ctf-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .ctf-text {
-            flex: 1;
-        }
-
-        .ctf-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--light);
-        }
-
-        .ctf-desc {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px;
-        }
-
-        .ctf-features {
-            margin-top: 30px;
-        }
-
-        .ctf-feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .ctf-feature-icon {
-            width: 30px;
-            height: 30px;
-            background: rgba(0, 200, 150, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--secondary);
-            font-size: 1rem;
-        }
-
-        .ctf-feature-text {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* SCHEDULE */
-        .schedule {
-            background: var(--dark);
-            position: relative;
-        }
-
-        .schedule::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1600/900') center/cover no-repeat;
-            opacity: 0.05;
-            z-index: 0;
-        }
-
-        .schedule-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        .schedule-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .schedule-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .schedule-tab {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            background: rgba(18, 18, 18, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .schedule-tab:first-child {
-            border-radius: 8px 0 0 8px;
-        }
-
-        .schedule-tab:last-child {
-            border-radius: 0 8px 8px 0;
-        }
-
-        .schedule-tab.active {
-            background: var(--gradient);
-            color: white;
-            border-color: transparent;
-        }
-
-        .schedule-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .schedule-day {
-            display: none;
-        }
-
-        .schedule-day.active {
-            display: block;
-        }
-
-        .schedule-item {
-            display: flex;
-            margin-bottom: 30px;
-            background: rgba(18, 18, 18, 0.8);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .schedule-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(108, 99, 255, 0.3);
-        }
-
-        .schedule-time {
-            padding: 20px;
-            background: rgba(108, 99, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 120px;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .schedule-time-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--secondary);
-        }
-
-        .schedule-details {
-            padding: 20px;
-            flex: 1;
-        }
-
-        .schedule-event {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--light);
-        }
-
-        .schedule-desc {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* SPONSORS */
-        .sponsors {
-            background: var(--darker);
-            text-align: center;
-            min-height: auto;
-            padding: 80px 0;
-        }
-
-        .sponsors-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .sponsors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .sponsor-item {
-            background: rgba(18, 18, 18, 0.8);
-            border-radius: 10px;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            height: 150px;
-        }
-
-        .sponsor-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(108, 99, 255, 0.3);
-        }
-
-        .sponsor-item img {
-            max-width: 80%;
-            max-height: 80%;
-            filter: grayscale(100%) brightness(1.2);
-            transition: all 0.3s ease;
-        }
-
-        .sponsor-item:hover img {
-            filter: grayscale(0%);
-        }
-
-        /* PRIZES */
-        .prizes {
-            background: var(--dark);
-            position: relative;
-        }
-
-        .prizes::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1600/900') center/cover no-repeat;
-            opacity: 0.05;
-            z-index: 0;
-        }
-
-        .prizes-container {
-            position: relative;
-            z-index: 2;
-        }
-
-        .prizes-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .prizes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .prize-card {
-            background: rgba(18, 18, 18, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .prize-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-        }
-
-        .prize-card:nth-child(1)::before {
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-        }
-
-        .prize-card:nth-child(2)::before {
-            background: linear-gradient(90deg, #C0C0C0, #A9A9A9);
-        }
-
-        .prize-card:nth-child(3)::before {
-            background: linear-gradient(90deg, #CD7F32, #8B4513);
-        }
-
-        .prize-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .prize-position {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--light);
-        }
-
-        .prize-amount {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .prize-desc {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* FAQ */
-        .faq {
-            background: var(--darker);
-            position: relative;
-        }
-
-        .faq-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .faq-item {
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .faq-question {
-            background: rgba(18, 18, 18, 0.8);
-            padding: 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
-            color: var(--light);
-            transition: all 0.3s ease;
-        }
-
-        .faq-question:hover {
-            background: rgba(108, 99, 255, 0.1);
-        }
-
-        .faq-question::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--secondary);
-        }
-
-        .faq-item.active .faq-question::after {
-            content: '-';
-        }
-
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: rgba(10, 10, 10, 0.8);
-        }
-
-        .faq-item.active .faq-answer {
-            padding: 20px;
-            max-height: 300px;
-        }
-
-        .faq-answer p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* REGISTER */
-        .register {
-            background: var(--dark);
-            position: relative;
-            overflow: hidden;
-            padding: 100px 0;
-            text-align: center;
-        }
-
-        .register::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1600/900') center/cover no-repeat;
-            opacity: 0.05;
-            z-index: 0;
-        }
-
-        .register-container {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .register-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--light);
-        }
-
-        .register-desc {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .register-btn {
-            font-size: 1.2rem;
-            padding: 15px 40px;
-        }
-
-        /* FOOTER */
-        footer {
-            background: var(--darker);
-            padding: 80px 0 30px;
-            position: relative;
-        }
-
-        .footer-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--light);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary);
-            padding-left: 5px;
-        }
-
-        .footer-contact {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-contact-icon {
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-        }
-
-        .footer-contact-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
-        }
-
-        /* MEDIA QUERIES */
-        @media screen and (max-width: 1024px) {
-            .hero-title {
-                font-size: 3.5rem;
-            }
-
-            .hero-graphic {
-                width: 40%;
-            }
-
-            .countdown-value {
-                width: 100px;
-                height: 100px;
-                font-size: 3rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .hero-content {
-                text-align: center;
-                max-width: 100%;
-            }
-
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .hero-graphic {
-                display: none;
-            }
-
-            .hero-btns {
-                justify-content: center;
-            }
-
-            .countdown-timer {
-                flex-wrap: wrap;
-            }
-
-            .countdown-value {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
-            }
-
-            .ctf-content {
-                flex-direction: column;
-            }
-
-            .ctf-image {
-                margin-bottom: 30px;
-            }
-
-            .schedule-tab {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
-
-            .schedule-time {
-                min-width: 80px;
-            }
-
-            .schedule-time-value {
-                font-size: 1rem;
-            }
-
-            .schedule-event {
-                font-size: 1.1rem;
-            }
-
-            /* Additional tablet adjustments */
-            .about-container {
-                padding: 0 20px;
-            }
-
-            .stats-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .stat-item {
-                margin: 0 auto;
-                max-width: 300px;
-            }
-
-            .tracks-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-
-            .prizes-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-
-            .sponsors-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            }
-
-            .footer-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .footer-container > div {
-                margin-bottom: 30px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .countdown-timer {
-                gap: 15px;
-            }
-
-            .countdown-value {
-                width: 70px;
-                height: 70px;
-                font-size: 2rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .stat-item {
-                margin: 0 5px;
-            }
-
-            .stat-value {
-                font-size: 2.5rem;
-            }
-
-            .register-title {
-                font-size: 2.5rem;
-            }
-
-            /* Additional mobile adjustments */
-            .header-container {
-                padding: 0 15px;
-            }
-
-            header {
-                padding: 15px 0;
-            }
-
-            .mobile-menu {
-                position: relative;
-                z-index: 1100;
-            }
-
-            .nav-links.active {
-                position: fixed;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background: var(--darker);
-                flex-direction: column;
-                gap: 15px;
-                padding: 20px 15px;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
-                max-height: calc(100vh - 60px);
-                overflow-y: auto;
-                z-index: 1050;
-            }
-
-            .nav-links a {
-                font-size: 1.2rem;
-                padding: 10px 0;
-            }
-
-            .hero-desc {
-                font-size: 1rem;
-            }
-
-            .btn {
-                font-size: 0.9rem;
-                padding: 10px 20px;
-            }
-
-            .schedule-item {
-                flex-direction: column;
-            }
-
-            .schedule-time {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                padding: 10px 0;
-                min-width: auto;
-            }
-
-            .schedule-details {
-                padding: 15px 0;
-            }
-
-            .footer-container {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .footer-container > div {
-                margin-bottom: 30px;
-            }
-        }
-
-        /* ANIMATIONS */
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .pulse-animation {
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes backgroundGradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Canvas Background */
-        #canvas-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        /* Custom thin scrollbar styles */
-        /* For WebKit browsers */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--darker);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-            box-shadow: 0 0 5px var(--primary);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary);
-            box-shadow: 0 0 8px var(--secondary);
-        }
-
-    </style>
-    <script src="language-translations.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>algoXnirmaan | Military Division</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Courier New', monospace;
+    }
+    
+    body {
+      background-color: #0a0a0a;
+      color: #33ff33;
+      overflow-x: hidden;
+    }
+    
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: rgba(51, 255, 51, 0.1);
+      z-index: 2;
+      animation: scanline 6s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes scanline {
+      0% {
+        top: 0%;
+      }
+      100% {
+        top: 100%;
+      }
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 2px solid #33ff33;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    
+    .military-badge {
+      width: 80px;
+      height: 80px;
+      border: 2px solid #33ff33;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .military-badge::before {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border: 1px solid #33ff33;
+      border-radius: 50%;
+    }
+    
+    .military-badge::after {
+      content: "AXN";
+      font-weight: bold;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+    
+    nav ul li {
+      margin-left: 20px;
+    }
+    
+    nav ul li a {
+      color: #33ff33;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 1px;
+      position: relative;
+      padding: 5px 0;
+    }
+    
+    nav ul li a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: #33ff33;
+      transition: width 0.3s ease;
+    }
+    
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+    
+    main {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 50px 0;
+    }
+    
+    .classified {
+      border: 2px solid #33ff33;
+      padding: 20px;
+      margin-bottom: 40px;
+      position: relative;
+      background-color: rgba(0, 10, 0, 0.7);
+    }
+    
+    .classified::before {
+      content: "CLASSIFIED";
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background-color: #0a0a0a;
+      padding: 0 10px;
+      color: #ff3333;
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+    }
+    
+    .mission-statement {
+      margin-bottom: 40px;
+      max-width: 800px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    
+    .countdown-section {
+      margin-top: 40px;
+    }
+    
+    .countdown-title {
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    
+    .countdown-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    
+    .countdown-item {
+      margin: 0 15px;
+      text-align: center;
+    }
+    
+    .countdown-value {
+      font-size: 36px;
+      font-weight: bold;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #33ff33;
+      margin-bottom: 10px;
+      background-color: rgba(0, 20, 0, 0.7);
+    }
+    
+    .countdown-label {
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    
+    .cta-button {
+      background-color: transparent;
+      color: #33ff33;
+      border: 2px solid #33ff33;
+      padding: 12px 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-button:hover {
+      background-color: rgba(51, 255, 51, 0.1);
+    }
+    
+    .cta-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(51, 255, 51, 0.3), transparent);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      20% {
+        left: 100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+    
+    .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 80px;
+    }
+    
+    .feature {
+      width: 300px;
+      margin-bottom: 40px;
+      padding: 20px;
+      border: 1px solid #33ff33;
+      background-color: rgba(0, 10, 0, 0.5);
+    }
+    
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+    
+    .feature h3 {
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      border-top: 2px solid #33ff33;
+      margin-top: 40px;
+    }
+    
+    .coordinates {
+      margin-top: 10px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .blinking {
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced Radar Styles */
+    .radar-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 40px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
+      border: 2px solid #33ff33;
+      background-color: rgba(0, 20, 0, 0.2);
+    }
+    
+    .radar-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle, rgba(0, 20, 0, 0.7) 0%, rgba(0, 10, 0, 0.9) 70%, rgba(0, 5, 0, 1) 100%),
+        repeating-radial-gradient(circle, transparent 0, transparent 20px, rgba(51, 255, 51, 0.1) 20px, rgba(51, 255, 51, 0.1) 21px);
+      border-radius: 50%;
+    }
+    
+    .radar-rings {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    
+    .radar-ring {
+      position: absolute;
+      border: 1px solid rgba(51, 255, 51, 0.3);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .radar-axis {
+      position: absolute;
+      background-color: rgba(51, 255, 51, 0.2);
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 100%;
+    }
+    
+    .radar-axis.horizontal {
+      width: 100%;
+      height: 1px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+    
+    .radar-axis.diagonal1 {
+      width: 1px;
+      height: 100%;
+      transform: translateX(-50%) rotate(45deg);
+      transform-origin: center;
+    }
+    
+    .radar-axis.diagonal2 {
+      width: 1px;
+      height: 100%;
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: center;
+    }
+    
+    .radar-sweep {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    
+    .radar-sweep-line {
+      position: absolute;
+      width: 50%;
+      height: 2px;
+      background: linear-gradient(to right, rgba(51, 255, 51, 0.7), rgba(51, 255, 51, 0));
+      top: 50%;
+      left: 50%;
+      transform-origin: left center;
+      animation: radarSweep 4s linear infinite;
+    }
+    
+    @keyframes radarSweep {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .radar-afterglow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: transparent;
+      clip-path: polygon(50% 50%, 50% 0%, 60% 0%, 60% 50%);
+      animation: radarAfterglowRotate 4s linear infinite;
+      opacity: 0.3;
+      background: radial-gradient(ellipse at center, rgba(51, 255, 51, 0.4) 0%, rgba(51, 255, 51, 0) 70%);
+    }
+    
+    @keyframes radarAfterglowRotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .radar-blip {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #ff3333;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 5px #ff3333;
+    }
+    
+    .radar-blip.friendly {
+      background-color: #33ff33;
+      box-shadow: 0 0 5px #33ff33;
+    }
+    
+    .radar-blip.unknown {
+      background-color: #ffff33;
+      box-shadow: 0 0 5px #ffff33;
+    }
+    
+    .radar-blip.fading {
+      animation: blipFade 3s forwards;
+    }
+    
+    @keyframes blipFade {
+      0% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 0.7;
+      }
+      100% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1.5);
+      }
+    }
+    
+    .radar-hud {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    
+    .radar-label {
+      position: absolute;
+      color: #33ff33;
+      font-size: 10px;
+      opacity: 0.8;
+      text-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+    }
+    
+    .radar-north {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .radar-east {
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+    }
+    
+    .radar-south {
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .radar-west {
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+    }
+    
+    .radar-stats {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      font-size: 12px;
+      color: #33ff33;
+    }
+    
+    .radar-stat {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .radar-stat-value {
+      font-weight: bold;
+    }
+    
+    .radar-noise {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92U2hXHF/C1M8uP/ZtYdiuj26UdAdQQSXQErwSOMzt/XWRWAz5GuSBIkwG1H3FabJ2OsUOUhGC6tK4EMtJO0ttC6IBD3kM0ve0tJwMdSfjZo+EEISaeTr9P3wYrGjXqyC1krcKdhMpxEnt5JetoulscpyzhXN5FRpuPHvbeQaKxFAEB6EN+cYN6xD7RYGpXpNndMmZgM5Dcs3YSNFDHUo2LGfZuukSWyUYirJAdYbF3MfqEKmjM+I2EfhA94iG3L7uKrR+GdWD73ydlIB+6hgref1QTlmgmbM3/LeX5GI1Ux1RWpgxpLuZ2+I+IjzZ8wqE4nilvQdkUdfhzI5QDWy+kw5Wgg2pGpeEVeCCA7b85BO3F9DzxB3cdqvBzWcmzbyMiqhzuYqtHRVG2y4x+KOlnyqla8AoWWpuBoYRxzXrfKuILl6SfiWCbjxoZJUaCBj1CjH7GIaDbc9kqBY3W/Rgjda1iqQcOJu2WW+76pZC9QG7M00dffe9hNnseupFL53r8F7YHSwJWUKP2q+k7RdsxyOB11n0xtOvnW4irMMFNV4H0uqwS5ExsmP9AxbDTc9JwgneAT5vTiUSm1E7BSflSt3bfa1tv8Di3R8n3Af7MNWzs49hmauE2wP+ttrq+AsWpFG2awvsuOqbipWHgtuvuaAE+A1Z/7gC9hesnr+7wqCwG8c5yAg3AL1fm8T9AZtp/bbJGwl1pNrE7RuOX7PeMRUERVaPpEs+yqeoSmuOlokqw49pgomjLeh7icHNlG19yjs6XXOMedYm5xH2YxpV2tc0Ro2jJfxC50ApuxGob7lMsxfTbeUv07TyYxpeLucEH1gNd4IKH2LAg5TdVhlCafZvpskfncCfx8pOhJzd76bJWeYFnFciwcYfubRc12Ip/ppIhA1/mSZ/RxjFDrJC5xifFjJpY2Xl5zXdguFqYyTR1zSp1Y9p+tktDYYSNflcxI0iyO4TPBdlRcpeqjK/piF5bklq77VSEaA+z8qmJTFzIWiitbnzR794USKBUaT0NTEsVjZqLaFVqJoPN9ODG70IPbfBHKK+/q/AWR0tJzYHRULOa4MP+W/HfGadZUbfw177G7j/OGbIs8TahLyynl4X4RinF793Oz+BU0saXtUHrVBFT/DnA3ctNPoGbs4hRIjTok8i+algT1lTHi4SxFvONKNrgQFAq2/gFnWMXgwffgYMJpiKYkmW3tTg3ZQ9Jq+f8XN+A5eeUKHWvJWJ2sgJ1Sop+wwhqFVijqWaJhwtD8MNlSBeWNNWTa5Z5kPZw5+LbVT99wqTdx29lMUH4OIG/D86ruKEauBjvH5xy6um/Sfj7ei6UUVk4AIl3MyD4MSSTOFgSwsH/QJWaQ5as7ZcmgBZkzjjU1UrQ74ci1gWBCSGHtuV1H2mhSnO3Wp/3fEV5a+4wz//6qy8JxjZsmxxy5+4w9CDNJY09T072iKG0EnOS0arEYgXqYnXcYHwjTtUNAcMelOd4xpkoqiTYICWFq0JSiPfPDQdnt+4/wuqcXY47QILbgAAAABJRU5ErkJggg==');
+      opacity: 0.05;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* Text information display near radar */
+    #coordinates-display {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin-top: 60px;
+      color: #33ff33;
+      background-color: rgba(0, 20, 0, 0.4);
+      padding: 10px;
+      border: 1px solid #33ff33;
+      text-align: left;
+      width: 400px;
+      position: relative;
+    }
+
+    #target-info {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin-top: 20px;
+      color: #33ff33;
+      background-color: rgba(0, 20, 0, 0.4);
+      padding: 10px;
+      border: 1px solid #33ff33;
+      text-align: left;
+      width: 400px;
+      position: relative;
+      display: none;
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .typing-effect {
+      overflow: hidden;
+      border-right: 2px solid #33ff33;
+      white-space: nowrap;
+      margin: 0 auto;
+      letter-spacing: 2px;
+      animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #33ff33 }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo" data-i18n="logo.text">AlgoX<span style="color: var(--secondary);">Nirmaan</span></div>
-            <nav class="nav-links">
-                <a href="#about" data-i18n="nav.about">About</a>
-                <a href="#tracks" data-i18n="nav.tracks">Tracks</a>
-                <a href="#ctf" data-i18n="nav.ctf">CTF</a>
-                <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
-                <a href="#prizes" data-i18n="nav.prizes">Prizes</a>
-                <a href="#faq" data-i18n="nav.faq">FAQ</a>
-                <a href="#register" class="btn" data-i18n="nav.register">Register Now</a>
-            </nav>
-           
-            <div class="mobile-menu" aria-label="Toggle navigation menu" role="button" tabindex="0">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
-    </header>
+  <div id="canvas-container"></div>
+  <div id="overlay"></div>
+  <div class="scan-line"></div>
+  
+  <div class="container" id="root"></div>
 
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-date">September 6-7, 2025</div>
-                <div class="hero-subtitle">Presented by Vectorix Community</div>
-                <h1 class="hero-title">AlgoX<span style="color: var(--secondary);">Nirmaan</span> Hackathon</h1>
-                <p class="hero-desc">36 hours of innovation, coding, and problem-solving. Join us for an unforgettable hackathon experience featuring advanced tracks, CTF challenges, amazing prizes, and endless opportunities to learn and grow.</p>
-                <div class="hero-btns">
-                    <a href="#register" class="btn">Register Now</a>
-                    <a href="#about" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </div>
-        <canvas id="canvas-background"></canvas>
-    </section>
-
-    <section class="countdown">
-        <div class="container countdown-container">
-        <h2 class="countdown-title" data-i18n="countdown.title">Hackathon Starts In</h2>
-            <div class="countdown-timer">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="days">125</div>
-                    <div class="countdown-label" data-i18n="countdown.days">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="hours">00</div>
-                    <div class="countdown-label" data-i18n="countdown.hours">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">00</div>
-                    <div class="countdown-label" data-i18n="countdown.minutes">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">00</div>
-                    <div class="countdown-label" data-i18n="countdown.seconds">Seconds</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="about" id="about">
-        <div class="container about-container">
-            <h2 class="section-title" data-i18n="about.title">About The Event</h2>
-            <p class="about-desc" data-i18n="about.desc1">AlgoXNirmaan is a 36-hour hackathon where creativity meets technology. Organized by the Vectorix Community, this event brings together talented individuals to collaborate, innovate, and build solutions to real-world problems. Whether you're a seasoned developer or just starting your tech journey, AlgoXNirmaan offers a platform to showcase your skills, learn from industry experts, and win exciting prizes.</p>
-            <p class="about-desc" data-i18n="about.desc2">This year's hackathon features multiple tracks including AI/ML, Blockchain, IoT, and more. We also have a special Capture The Flag (CTF) competition for cybersecurity enthusiasts. Join us for an action-packed weekend of coding, learning, and networking!</p>
-            <div class="stats-container">
-                <div class="stat-item">
-                    <div class="stat-value">36</div>
-                    <div class="stat-label">Hours</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">5+</div>
-                    <div class="stat-label">Tracks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">₹5L+</div>
-                    <div class="stat-label">Prizes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">500+</div>
-                    <div class="stat-label">Hackers</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="tracks" id="tracks">
-        <div class="container tracks-container">
-            <div class="tracks-header">
-                <h2 class="section-title" data-i18n="tracks.title">Hackathon Tracks</h2>
-                <p class="about-desc" data-i18n="tracks.desc">Choose from a variety of cutting-edge tracks and showcase your skills</p>
-            </div>
-            <div class="tracks-grid">
-                <div class="track-card">
-                    <div class="track-icon">🤖</div>
-                    <h3 class="track-title" data-i18n="tracks.ai.title">AI & Machine Learning</h3>
-                    <p class="track-desc" data-i18n="tracks.ai.desc">Build intelligent solutions using cutting-edge AI and ML technologies. Create models that solve real-world problems or enhance existing systems.</p>
-                </div>
-                <div class="track-card">
-                    <div class="track-icon">⛓️</div>
-                    <h3 class="track-title" data-i18n="tracks.blockchain.title">Blockchain</h3>
-                    <p class="track-desc" data-i18n="tracks.blockchain.desc">Develop decentralized applications, smart contracts, or innovative blockchain solutions that address trust, security, or efficiency challenges.</p>
-                </div>
-                <div class="track-card">
-                    <div class="track-icon">🌐</div>
-                    <h3 class="track-title" data-i18n="tracks.web3.title">Web3 & DeFi</h3>
-                    <p class="track-desc" data-i18n="tracks.web3.desc">Create next-generation web applications using decentralized technologies, focusing on financial inclusion, transparency, and user control.</p>
-                </div>
-                <div class="track-card">
-                    <div class="track-icon">📱</div>
-                    <h3 class="track-title" data-i18n="tracks.mobile.title">Mobile & IoT</h3>
-                    <p class="track-desc" data-i18n="tracks.mobile.desc">Build mobile applications or IoT solutions that connect devices and provide seamless experiences for users in various domains.</p>
-                </div>
-                <div class="track-card">
-                    <div class="track-icon">🌍</div>
-                    <h3 class="track-title" data-i18n="tracks.sustainability.title">Sustainability Tech</h3>
-                    <p class="track-desc" data-i18n="tracks.sustainability.desc">Develop solutions that address environmental challenges, promote sustainable practices, or contribute to achieving the UN's Sustainable Development Goals.</p>
-                </div>
-                <div class="track-card">
-                    <div class="track-icon">🔒</div>
-                    <h3 class="track-title" data-i18n="tracks.cybersecurity.title">Cybersecurity</h3>
-                    <p class="track-desc" data-i18n="tracks.sustainability.desc">Develop solutions that address environmental challenges, promote sustainable practices, or contribute to achieving the UN's Sustainable Development Goals.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="ctf" id="ctf">
-        <div class="container ctf-container">
-            <h2 class="section-title" data-i18n="nav.ctf">Capture The Flag</h2>
-            <div class="ctf-content">
-<div id="network-animation" style="width: 100%; max-width: 600px; height: auto; aspect-ratio: 3 / 2; border-radius: 15px; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;"></div>
-                <div class="ctf-text">
-                    <h3 class="ctf-title" data-i18n="ctf.title">Test Your Security Skills</h3>
-                    <p class="ctf-desc" data-i18n="ctf.desc1">Alongside the hackathon, we're hosting an exciting Capture The Flag (CTF) competition for cybersecurity enthusiasts. Put your skills to the test in a series of challenges designed to push your limits.</p>
-                    <p class="ctf-desc" data-i18n="ctf.desc2">Whether you're a seasoned security professional or just getting started in the field, our CTF challenges offer something for everyone.</p>
-                    <div class="ctf-features">
-                        <div class="ctf-feature">
-                            <div class="ctf-feature-icon">🔍</div>
-                            <div class="ctf-feature-text" data-i18n="ctf.feature.web">Web Exploitation</div>
-                        </div>
-                        <div class="ctf-feature">
-                            <div class="ctf-feature-icon">🧩</div>
-                            <div class="ctf-feature-text" data-i18n="ctf.feature.crypto">Cryptography</div>
-                        </div>
-                        <div class="ctf-feature">
-                            <div class="ctf-feature-icon">🔌</div>
-                            <div class="ctf-feature-text" data-i18n="ctf.feature.binary">Binary Exploitation</div>
-                        </div>
-                        <div class="ctf-feature">
-                            <div class="ctf-feature-icon">🕵️</div>
-                            <div class="ctf-feature-text" data-i18n="ctf.feature.forensics">Forensics</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 30px;">
-                        <a href="#register" class="btn" data-i18n="ctf.join">Join CTF Challenge</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="schedule" id="schedule">
-        <div class="container schedule-container">
-            <div class="schedule-header">
-            <h2 class="section-title" data-i18n="nav.schedule">Event Schedule</h2>
-            <p class="about-desc" data-i18n="schedule.desc">Plan your 36-hour hackathon journey</p>
-            </div>
-            <div class="schedule-tabs">
-                <div class="schedule-tab active" data-day="day1" data-i18n="schedule.day1">Day 1 (Sep 6)</div>
-                <div class="schedule-tab" data-day="day2" data-i18n="schedule.day2">Day 2 (Sep 7)</div>
-            </div>
-            <div class="schedule-content">
-                <div class="schedule-day active" id="day1">
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">09:00 AM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.registration">Registration & Check-in</div>
-                            <div class="schedule-desc" data-i18n="schedule.registration.desc">Pick up your participant kit and get ready for the event</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">10:00 AM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.opening">Opening Ceremony</div>
-                            <div class="schedule-desc" data-i18n="schedule.opening.desc">Welcome address, introduction to tracks, sponsors, and judges</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">11:00 AM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.begin">Hackathon Begins</div>
-                            <div class="schedule-desc" data-i18n="schedule.begin.desc">Start coding and bringing your ideas to life</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">12:30 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.lunch">Lunch</div>
-                            <div class="schedule-desc" data-i18n="schedule.lunch.desc">Fuel up for the coding marathon ahead</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">02:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.techtalk">Tech Talk: Future of AI</div>
-                            <div class="schedule-desc" data-i18n="schedule.techtalk.desc">Industry experts discuss the latest trends in artificial intelligence</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">04:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.ctfbegin">CTF Challenge Begins</div>
-                            <div class="schedule-desc" data-i18n="schedule.ctfbegin.desc">Start solving cybersecurity challenges</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">07:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.dinner">Dinner</div>
-                            <div class="schedule-desc" data-i18n="schedule.dinner.desc">Take a break and enjoy a delicious meal</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">09:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                            <div class="schedule-event" data-i18n="schedule.mentorship">Mentorship Session</div>
-                            <div class="schedule-desc" data-i18n="schedule.mentorship.desc">Get guidance from industry mentors to refine your project</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="schedule-day" id="day2">
-                <div class="schedule-item">
-                    <div class="schedule-time">
-                        <div class="schedule-time-value">08:00 AM</div>
-                    </div>
-                    <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.breakfast">Breakfast</div>
-                        <div class="schedule-desc" data-i18n="schedule.breakfast.desc">Start your day with a nutritious breakfast</div>
-                    </div>
-                </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">10:00 AM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.workshop">Workshop: Pitch Perfect</div>
-                        <div class="schedule-desc" data-i18n="schedule.workshop.desc">Learn how to effectively present your project to judges</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">12:30 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.lunch2">Lunch</div>
-                        <div class="schedule-desc" data-i18n="schedule.lunch2.desc">Final meal before project submission</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">03:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.ctfend">CTF Challenge Ends</div>
-                        <div class="schedule-desc" data-i18n="schedule.ctfend.desc">Final submissions for the cybersecurity competition</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">05:00 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.end">Hackathon Ends</div>
-                        <div class="schedule-desc" data-i18n="schedule.end.desc">Final code submissions and project deployment</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">05:30 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.presentations">Project Presentations</div>
-                        <div class="schedule-desc" data-i18n="schedule.presentations.desc">Teams present their projects to judges and audience</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">07:30 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.award">Award Ceremony</div>
-                        <div class="schedule-desc" data-i18n="schedule.award.desc">Announcement of winners and prize distribution</div>
-                        </div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">
-                            <div class="schedule-time-value">08:30 PM</div>
-                        </div>
-                        <div class="schedule-details">
-                        <div class="schedule-event" data-i18n="schedule.closing">Closing Party</div>
-                        <div class="schedule-desc" data-i18n="schedule.closing.desc">Celebrate your achievements with music, food, and networking</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="prizes" id="prizes">
-        <div class="container prizes-container">
-            <div class="prizes-header">
-            <h2 class="section-title" data-i18n="nav.prizes">Exciting Prizes</h2>
-            <p class="about-desc" data-i18n="prizes.desc">Compete for amazing rewards and recognition</p>
-            </div>
-            <div class="prizes-grid">
-                <div class="prize-card">
-                <div class="prize-position" data-i18n="prizes.first.position">1st Prize</div>
-                <div class="prize-amount" data-i18n="prizes.first.amount">₹2,50,000</div>
-                <p class="prize-desc" data-i18n="prizes.first.desc">Cash prize, mentorship opportunities, and exclusive access to industry events</p>
-                </div>
-                <div class="prize-card">
-                <div class="prize-position" data-i18n="prizes.second.position">2nd Prize</div>
-                <div class="prize-amount" data-i18n="prizes.second.amount">₹1,50,000</div>
-                <p class="prize-desc" data-i18n="prizes.second.desc">Cash prize and advanced tech gadgets for the team</p>
-                </div>
-                <div class="prize-card">
-                <div class="prize-position" data-i18n="prizes.third.position">3rd Prize</div>
-                <div class="prize-amount" data-i18n="prizes.third.amount">₹75,000</div>
-                <p class="prize-desc" data-i18n="prizes.third.desc">Cash prize and software subscriptions for the team</p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 20px;" data-i18n="prizes.special.title">Special Prizes</h3>
-                <p class="about-desc" data-i18n="prizes.special.desc">Additional prizes for Best UI/UX, Most Innovative Solution, Best Use of AI, and CTF Winners</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="sponsors">
-        <div class="container sponsors-container">
-            <h2 class="section-title" data-i18n="nav.sponsors">Our Sponsors</h2>
-            <p class="about-desc" data-i18n="sponsors.desc">Thanks to our amazing sponsors for making this event possible</p>
-            <div class="sponsors-grid">
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 1">
-                </div>
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 2">
-                </div>
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 3">
-                </div>
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 4">
-                </div>
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 5">
-                </div>
-                <div class="sponsor-item">
-                    <img src="/api/placeholder/200/80" alt="Sponsor 6">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="faq" id="faq">
-        <div class="container faq-container">
-            <div class="faq-header">
-            <h2 class="section-title" data-i18n="nav.faq">Frequently Asked Questions</h2>
-            <p class="about-desc" data-i18n="faq.desc">Find answers to common questions about the hackathon</p>
-            </div>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q1">Who can participate in AlgoXNirmaan?</div>
-                    <div class="faq-answer">
-                        <p>AlgoXNirmaan is open to students, professionals, and tech enthusiasts of all skill levels. You can participate as an individual or form a team of up to 4 members.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q2">Do I need to have coding experience?</div>
-                    <div class="faq-answer">
-                        <p>While coding experience is helpful, we welcome participants with diverse skills. Teams typically need a mix of developers, designers, and domain experts. We also have mentors to help you throughout the event.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q3">Is there a registration fee?</div>
-                    <div class="faq-answer">
-                        <p>No, AlgoXNirmaan is completely free to attend. We believe in making tech events accessible to everyone passionate about innovation and problem-solving.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q4">What should I bring to the hackathon?</div>
-                    <div class="faq-answer">
-                        <p>You should bring your laptop, charger, any hardware you might need for your project, and a valid ID. We'll provide food, drinks, and a comfortable workspace throughout the event.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q5">Will accommodation be provided?</div>
-                    <div class="faq-answer">
-                        <p>We'll provide comfortable resting areas at the venue for participants who want to take short breaks. For those coming from out of town, we have partnered with nearby hotels to offer discounted rates.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q6">Can I work on a pre-existing project?</div>
-                    <div class="faq-answer">
-                        <p>No, all projects must be built from scratch during the hackathon. However, you can come prepared with ideas and discuss them with your team beforehand.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question" data-i18n="faq.q7">How does the judging work?</div>
-                    <div class="faq-answer">
-                        <p>Projects will be judged based on innovation, technical complexity, usability, presentation, and relevance to the chosen track. Our panel of judges includes industry experts, tech leaders, and representatives from our sponsor companies.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="register" id="register">
-        <div class="container register-container">
-            <h2 class="register-title" data-i18n="nav.register">Ready to Hack?</h2>
-            <p class="register-desc" data-i18n="register.desc">Register now and secure your spot at AlgoXNirmaan. Join hundreds of innovators for an epic 36-hour coding adventure!</p>
-            <a href="#" class="btn register-btn" data-i18n="register.btn">Register for AlgoXNirmaan</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px;">
-                <div style="flex: 1 1 250px; min-width: 250px;">
-            <h2 class="footer-logo" style="font-size: 1.8rem; font-weight: 700;" data-i18n="footer.logo">AlgoXNirmaan</h2>
-            <p class="footer-desc" data-i18n="footer.desc">A 36-hour hackathon presented by Vectorix Community to foster innovation and technological advancement.</p>
-            <div class="footer-social" style="display: flex; gap: 15px; margin-top: 15px;">
-                <a href="#" aria-label="Phone" title="Phone" data-i18n="footer.social.phone" style="font-size: 1.5rem;">📱</a>
-                <a href="#" aria-label="Laptop" title="Laptop" data-i18n="footer.social.laptop" style="font-size: 1.5rem;">💻</a>
-                <a href="#" aria-label="Email" title="Email" data-i18n="footer.social.email" style="font-size: 1.5rem;">📧</a>
-                <a href="#" aria-label="Instagram" title="Instagram" data-i18n="footer.social.instagram" style="font-size: 1.5rem;">📸</a>
-            </div>
-                </div>
-                <div style="flex: 1 1 150px; min-width: 150px;">
-                    <h3 class="footer-title" data-i18n="footer.quicklinks">Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home" data-i18n="footer.home">Home</a></li>
-                        <li><a href="#about" data-i18n="footer.about">About</a></li>
-                        <li><a href="#tracks" data-i18n="footer.tracks">Tracks</a></li>
-                        <li><a href="#ctf" data-i18n="footer.ctf">CTF</a></li>
-                        <li><a href="#schedule" data-i18n="footer.schedule">Schedule</a></li>
-                    </ul>
-                </div>
-                <div style="flex: 1 1 150px; min-width: 150px;">
-                    <h3 class="footer-title" data-i18n="footer.resources">Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" data-i18n="footer.codeOfConduct">Code of Conduct</a></li>
-                        <li><a href="#" data-i18n="footer.faqs">FAQs</a></li>
-                        <li><a href="#" data-i18n="footer.sponsorship">Sponsorship</a></li>
-                        <li><a href="#" data-i18n="footer.privacyPolicy">Privacy Policy</a></li>
-                        <li><a href="#" data-i18n="footer.termsConditions">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-                <div style="flex: 1 1 250px; min-width: 250px;">
-                    <h3 class="footer-title" data-i18n="footer.contactus">Contact Us</h3>
-                    <div class="footer-contact">
-                        <div class="footer-contact-icon" aria-hidden="true">📧</div>
-                        <div class="footer-contact-text" data-i18n="footer.contact.email">info@algoxnirmaan.com</div>
-                    </div>
-                    <div class="footer-contact">
-                        <div class="footer-contact-icon" aria-hidden="true">📱</div>
-                        <div class="footer-contact-text" data-i18n="footer.contact.phone">+91 9876543210</div>
-                    </div>
-                    <div class="footer-contact">
-                        <div class="footer-contact-icon" aria-hidden="true">📍</div>
-                        <div class="footer-contact-text" data-i18n="footer.contact.address">123 Innovation Drive, Tech City, India</div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom" style="margin-top: 40px;">
-                <p class="footer-copyright" data-i18n="footer.copyright">© 2025 AlgoXNirmaan. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Countdown Timer Script
-        const countdownDate = new Date("September 6, 2025 09:00:00").getTime();
-
-        const daysEl = document.getElementById("days");
-        const hoursEl = document.getElementById("hours");
-        const minutesEl = document.getElementById("minutes");
-        const secondsEl = document.getElementById("seconds");
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            if (distance < 0) {
-                daysEl.innerHTML = "00";
-                hoursEl.innerHTML = "00";
-                minutesEl.innerHTML = "00";
-                secondsEl.innerHTML = "00";
-                clearInterval(countdownInterval);
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysEl.innerHTML = days.toString().padStart(2, "0");
-            hoursEl.innerHTML = hours.toString().padStart(2, "0");
-            minutesEl.innerHTML = minutes.toString().padStart(2, "0");
-            secondsEl.innerHTML = seconds.toString().padStart(2, "0");
+  <script type="text/babel">
+    // React components
+    const App = () => {
+      const [countdown, setCountdown] = React.useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      });
+      
+      const [targetInfo, setTargetInfo] = React.useState({
+        visible: false,
+        id: "",
+        type: "",
+        distance: "",
+        velocity: "",
+        threat: ""
+      });
+      
+      React.useEffect(() => {
+        // Set up the countdown timer
+        const targetDate = new Date('June 1, 2025 00:00:00').getTime();
+        
+        const interval = setInterval(() => {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+          
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+          setCountdown({ days, hours, minutes, seconds });
+          
+          if (distance < 0) {
+            clearInterval(interval);
+            setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          }
+        }, 1000);
+        
+        return () => clearInterval(interval);
+      }, []);
+      
+      // Create radar blips
+      React.useEffect(() => {
+        const radar = document.querySelector('.radar-container');
+        const radarRect = radar.getBoundingClientRect();
+        const radarCenter = radarRect.width / 2;
+        
+        // Create radar rings
+        const rings = document.querySelector('.radar-rings');
+        const ringCounts = 4;
+        
+        for (let i = 1; i <= ringCounts; i++) {
+          const ring = document.createElement('div');
+          ring.classList.add('radar-ring');
+          const size = (radarRect.width / ringCounts) * i;
+          ring.style.width = `${size}px`;
+          ring.style.height = `${size}px`;
+          rings.appendChild(ring);
         }
-
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Mobile menu toggle
-        const mobileMenu = document.querySelector(".mobile-menu");
-        const navLinks = document.querySelector(".nav-links");
-
-        mobileMenu.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-            mobileMenu.classList.toggle("active");
-        });
-
-        // Close mobile menu on nav link click
-        document.querySelectorAll(".nav-links a").forEach(link => {
-            link.addEventListener("click", () => {
-                navLinks.classList.remove("active");
-                mobileMenu.classList.remove("active");
+        
+        // Create initial blips
+        createInitialBlips();
+        
+        // Create random blips periodically
+        const blipInterval = setInterval(() => {
+          createRandomBlip();
+        }, 3000);
+        
+        // Clean up interval on unmount
+        return () => clearInterval(blipInterval);
+        
+        function createInitialBlips() {
+          // Add some initial blips
+          for (let i = 0; i < 5; i++) {
+            createRandomBlip();
+          }
+          
+          // Add a few friendly blips
+          for (let i = 0; i < 3; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * radarCenter * 0.8;
+            const x = Math.cos(angle) * radius + radarCenter;
+            const y = Math.sin(angle) * radius + radarCenter;
+            
+            createBlip(x, y, 'friendly');
+          }
+          
+          // Add one unknown blip
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * radarCenter * 0.6;
+          const x = Math.cos(angle) * radius + radarCenter;
+          const y = Math.sin(angle) * radius + radarCenter;
+          
+          createBlip(x, y, 'unknown');
+        }
+        
+        function createRandomBlip() {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * radarCenter * 0.9;
+          const x = Math.cos(angle) * radius + radarCenter;
+          const y = Math.sin(angle) * radius + radarCenter;
+          
+          createBlip(x, y);
+        }
+        
+        function createBlip(x, y, type = '') {
+          const blip = document.createElement('div');
+          blip.classList.add('radar-blip');
+          
+          if (type) {
+            blip.classList.add(type);
+          }
+          
+          blip.style.left = `${x}px`;
+          blip.style.top = `${y}px`;
+          
+          // Create random ID for the blip
+          const blipId = `TGT-${Math.floor(Math.random() * 9000) + 1000}`;
+          blip.dataset.id = blipId;
+          
+          // Create random threat level
+          const threatLevels = ['LOW', 'MEDIUM', 'HIGH', 'UNKNOWN'];
+          const threatLevel = threatLevels[Math.floor(Math.random() * threatLevels.length)];
+          blip.dataset.threat = threatLevel;
+          
+          // Create random distance
+          const distance = (Math.random() * 50 + 10).toFixed(1);
+          blip.dataset.distance = distance;
+          
+          // Create random velocity
+          const velocity = (Math.random() * 800 + 100).toFixed(1);
+          blip.dataset.velocity = velocity;
+          
+          // Create blip type
+          const blipTypes = ['AIR', 'NAVAL', 'GROUND', 'UNKNOWN'];
+          const blipType = type === 'friendly' ? 'ALLIED' : blipTypes[Math.floor(Math.random() * blipTypes.length)];
+          blip.dataset.type = blipType;
+          
+          radar.appendChild(blip);
+          
+          // Add click event to show target info
+          blip.addEventListener('click', () => {
+            setTargetInfo({
+              visible: true,
+              id: blipId,
+              type: blipType,
+              distance: `${distance} KM`,
+              velocity: `${velocity} KM/H`,
+              threat: threatLevel
             });
-        });
-
-        // Schedule tabs toggle
-        const scheduleTabs = document.querySelectorAll(".schedule-tab");
-        const scheduleDays = document.querySelectorAll(".schedule-day");
-
-        scheduleTabs.forEach(tab => {
-            tab.addEventListener("click", () => {
-                scheduleTabs.forEach(t => t.classList.remove("active"));
-                scheduleDays.forEach(day => day.classList.remove("active"));
-
-                tab.classList.add("active");
-                const dayId = tab.getAttribute("data-day");
-                document.getElementById(dayId).classList.add("active");
-            });
-        });
-
-        // FAQ toggle
-        const faqItems = document.querySelectorAll(".faq-item");
-
-        faqItems.forEach(item => {
-            const question = item.querySelector(".faq-question");
-            question.addEventListener("click", () => {
-                item.classList.toggle("active");
-            });
-        });
-
-        // Canvas background animation using Three.js
-        const canvas = document.getElementById("canvas-background");
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
+            
+            // Highlight selected blip
+            document.querySelectorAll('.radar-blip').forEach(b => b.style.boxShadow = '');
+            blip.style.boxShadow = '0 0 10px #ffffff';
+          });
+          
+          // Randomly make some blips fade and disappear
+          if (Math.random() > 0.7) {
+            blip.classList.add('fading');
+            setTimeout(() => {
+              blip.remove();
+            }, 3000);
+          }
+        }
+      }, [setTargetInfo]);
+      
+      // Three.js setup for background
+      React.useEffect(() => {
+        // Create a scene
         const scene = new THREE.Scene();
+        
+        // Create a camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
-
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0x6c63ff, wireframe: true });
-        const sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
-
-        // Additional 3D models
-        const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00c896, wireframe: true });
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        cube.position.set(-2, 0, 0);
-        scene.add(cube);
-
-        const torusGeometry = new THREE.TorusGeometry(0.7, 0.2, 16, 100);
-        const torusMaterial = new THREE.MeshBasicMaterial({ color: 0xff5757, wireframe: true });
-        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-        torus.position.set(2, 0, 0);
-        scene.add(torus);
-
-        // Add lights for new models
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-        const windowHalfX = window.innerWidth / 2;
-        const windowHalfY = window.innerHeight / 2;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - windowHalfX);
-            mouseY = (event.clientY - windowHalfY);
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            targetX = (mouseX / windowHalfX) * 0.5; // parallax intensity X
-            targetY = (mouseY / windowHalfY) * 0.5; // parallax intensity Y
-
-            // Apply parallax effect by adjusting camera position smoothly
-            camera.position.x += (targetX - camera.position.x) * 0.05;
-            camera.position.y += (-targetY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            sphere.rotation.x += 0.005;
-            sphere.rotation.y += 0.01;
-
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-
-            torus.rotation.x += 0.015;
-            torus.rotation.y += 0.015;
-
-            renderer.render(scene, camera);
+        
+        // Create a renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Create grid
+        const gridHelper = new THREE.GridHelper(20, 20, 0x33ff33, 0x33ff33);
+        gridHelper.position.y = -2;
+        scene.add(gridHelper);
+        
+        // Create particles for a starfield effect
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i++) {
+          posArray[i] = (Math.random() - 0.5) * 30;
         }
-
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+          size: 0.05,
+          color: 0x33ff33
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Animation loop
+        const animate = () => {
+          requestAnimationFrame(animate);
+          particlesMesh.rotation.y += 0.0005;
+          renderer.render(scene, camera);
+        };
+        
         animate();
+        
+        // Handle window resize
+        const handleResize = () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+          window.removeEventListener('resize', handleResize);
+          document.getElementById('canvas-container').removeChild(renderer.domElement);
+        };
+      }, []);
+      
+      // Coordinates display and update
+      React.useEffect(() => {
+        let coords = document.getElementById('coordinates-display');
+        
+        const updateCoordinates = () => {
+          const lat = (Math.random() * 180 - 90).toFixed(6);
+          const long = (Math.random() * 360 - 180).toFixed(6);
+          const altitude = Math.floor(Math.random() * 10000);
+          const bearing = Math.floor(Math.random() * 360);
+          const speed = Math.floor(Math.random() * 900) + 100;
+          const contacts = Math.floor(Math.random() * 12) + 1;
+          
+          coords.innerHTML = `
+            <div class="status-line"><span>LAT:</span> <span>${lat}°</span></div>
+            <div class="status-line"><span>LONG:</span> <span>${long}°</span></div>
+            <div class="status-line"><span>ALTITUDE:</span> <span>${altitude} M</span></div>
+            <div class="status-line"><span>BEARING:</span> <span>${bearing}°</span></div>
+            <div class="status-line"><span>SPEED:</span> <span>${speed} KM/H</span></div>
+            <div class="status-line"><span>ACTIVE CONTACTS:</span> <span>${contacts}</span></div>
+            <div class="status-line"><span>SYSTEM STATUS:</span> <span>OPERATIONAL</span></div>
+          `;
+        };
+        
+        updateCoordinates();
+        const coordInterval = setInterval(updateCoordinates, 3000);
+        
+        return () => clearInterval(coordInterval);
+      }, []);
 
-        window.addEventListener("resize", () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
-    <script>
-        // 3D Computer Network Visualization in CTF section using Three.js
-        (function() {
-            const container = document.getElementById('network-animation');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            camera.position.z = 10;
-
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(width, height);
-            container.appendChild(renderer.domElement);
-
-            // Add lights for illumination
-            const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // soft white light
-            scene.add(ambientLight);
-
-            const pointLight = new THREE.PointLight(0x00c896, 1.5, 50);
-            pointLight.position.set(0, 0, 10);
-            scene.add(pointLight);
-
-            // Create nodes (computers)
-            const nodeCount = 20;
-            const nodes = [];
-            const nodeGeometry = new THREE.SphereGeometry(0.15, 32, 32);
-            const nodeMaterial = new THREE.MeshStandardMaterial({ color: 0x00c896, emissive: 0x00ffb3, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.7 });
-
-            for (let i = 0; i < nodeCount; i++) {
-                const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-                // Position nodes randomly in a sphere shell above the globe
-                const phi = Math.acos(2 * Math.random() - 1);
-                const theta = 2 * Math.PI * Math.random();
-                const radius = 5 + Math.random() * 1.5; // radius larger than globe radius to keep nodes above
-                node.position.set(
-                    radius * Math.sin(phi) * Math.cos(theta),
-                    radius * Math.sin(phi) * Math.sin(theta),
-                    radius * Math.cos(phi)
-                );
-                scene.add(node);
-                nodes.push(node);
-            }
-
-            // Create globe wireframe
-            const globeGeometry = new THREE.SphereGeometry(4.5, 64, 64); // smaller radius to keep nodes above
-            const globeMaterial = new THREE.MeshBasicMaterial({ color: 0x6c63ff, wireframe: true, opacity: 0.2, transparent: true });
-            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
-            scene.add(globe);
-
-            // Create lines (connections) between nodes
-            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6c63ff, opacity: 0.5, transparent: true });
-            const lines = [];
-            const connections = []; // Store pairs of connected node indices
-
-            for (let i = 0; i < nodeCount; i++) {
-                for (let j = i + 1; j < nodeCount; j++) {
-                    if (Math.random() < 0.15) { // 15% chance to connect nodes
-                        const points = [];
-                        points.push(nodes[i].position);
-                        points.push(nodes[j].position);
-                        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                        const line = new THREE.Line(geometry, lineMaterial);
-                        scene.add(line);
-                        lines.push(line);
-                        connections.push([i, j]);
-                    }
-                }
-            }
-
-            // Create packets that travel along connections
-            const packetGeometry = new THREE.SphereGeometry(0.05, 16, 16);
-            const packetMaterial = new THREE.MeshStandardMaterial({ color: 0xff5757, emissive: 0xff5757, emissiveIntensity: 0.9, roughness: 0.2, metalness: 0.8 });
-            const packets = [];
-
-            // Function to create a packet traveling from nodeA to nodeB
-            function createPacket(nodeAIndex, nodeBIndex) {
-                const packet = new THREE.Mesh(packetGeometry, packetMaterial);
-                packet.userData = {
-                    start: nodes[nodeAIndex].position.clone(),
-                    end: nodes[nodeBIndex].position.clone(),
-                    progress: 0,
-                    speed: 0.01 + Math.random() * 0.02
-                };
-                packet.position.copy(packet.userData.start);
-                scene.add(packet);
-                packets.push(packet);
-            }
-
-            // Periodically send packets between connected nodes
-            setInterval(() => {
-                if (connections.length > 0) {
-                    const conn = connections[Math.floor(Math.random() * connections.length)];
-                    createPacket(conn[0], conn[1]);
-                }
-            }, 500);
-
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                // Rotate the whole scene slowly
-                scene.rotation.y += 0.002;
-                scene.rotation.x += 0.001;
-
-                // Rotate globe slightly faster for effect
-                globe.rotation.y += 0.003;
-                globe.rotation.x += 0.0015;
-
-                // Nodes pulse animation with emissive intensity modulation
-                nodes.forEach((node, idx) => {
-                    const scale = 1 + 0.3 * Math.sin(Date.now() * 0.002 + idx);
-                    node.scale.set(scale, scale, scale);
-                    const emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005 + idx);
-                    node.material.emissiveIntensity = emissiveIntensity;
-                });
-
-                // Update packets position
-                for (let i = packets.length - 1; i >= 0; i--) {
-                    const packet = packets[i];
-                    packet.userData.progress += packet.userData.speed;
-                    if (packet.userData.progress >= 1) {
-                        // Remove packet from scene and array
-                        scene.remove(packet);
-                        packets.splice(i, 1);
-                    } else {
-                        // Linear interpolation between start and end
-                        packet.position.lerpVectors(packet.userData.start, packet.userData.end, packet.userData.progress);
-                    }
-                }
-
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            // Handle resize
-            window.addEventListener('resize', () => {
-                const newWidth = container.clientWidth;
-                const newHeight = container.clientHeight;
-                camera.aspect = newWidth / newHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(newWidth, newHeight);
-            });
-        })();
-    </script>
-    <script>
-        // Anime.js animations for page elements
-
-        document.addEventListener("DOMContentLoaded", () => {
-            // Hero section animations
-            anime.timeline()
-                .add({
-                    targets: '.hero-date',
-                    translateY: [-50, 0],
-                    opacity: [0, 1],
-                    easing: 'easeOutExpo',
-                    duration: 1000,
-                    delay: 200
-                })
-                .add({
-                    targets: '.hero-subtitle',
-                    translateX: [-100, 0],
-                    opacity: [0, 1],
-                    easing: 'easeOutExpo',
-                    duration: 1000,
-                    offset: '-=700'
-                })
-                .add({
-                    targets: '.hero-title',
-                    translateY: [50, 0],
-                    opacity: [0, 1],
-                    easing: 'easeOutExpo',
-                    duration: 1200,
-                    offset: '-=700'
-                })
-                .add({
-                    targets: '.hero-desc',
-                    translateX: [100, 0],
-                    opacity: [0, 1],
-                    easing: 'easeOutExpo',
-                    duration: 1000,
-                    offset: '-=900'
-                })
-                .add({
-                    targets: '.hero-btns .btn',
-                    scale: [0.8, 1],
-                    opacity: [0, 1],
-                    delay: anime.stagger(150),
-                    easing: 'easeOutBack',
-                    duration: 800,
-                    offset: '-=800'
-                });
-
-            // Navigation links fade in
-            anime({
-                targets: '.nav-links a',
-                translateY: [-20, 0],
-                opacity: [0, 1],
-                delay: anime.stagger(100, { start: 1000 }),
-                easing: 'easeOutExpo',
-                duration: 800
-            });
-
-            // Button hover animation using anime.js
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', () => {
-                    anime({
-                        targets: button,
-                        scale: 1.05,
-                        duration: 300,
-                        easing: 'easeOutQuad'
-                    });
-                });
-                button.addEventListener('mouseleave', () => {
-                    anime({
-                        targets: button,
-                        scale: 1,
-                        duration: 300,
-                        easing: 'easeOutQuad'
-                    });
-                });
-            });
-
-            // Scroll animations for sections
-            const sections = document.querySelectorAll('section');
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.2
-            };
-
-            const sectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        anime({
-                            targets: entry.target,
-                            opacity: [0, 1],
-                            translateY: [50, 0],
-                            easing: 'easeOutExpo',
-                            duration: 1000,
-                            delay: 100
-                        });
-                        sectionObserver.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => {
-                section.style.opacity = 0;
-                sectionObserver.observe(section);
-            });
-        });
-    </script>
-    <script>
-
+      return (
+        <>
+          <header>
+            <div className="logo">ALGOXNIRMAAN</div>
+            <div className="military-badge"></div>
+          </header>
+          
+          <main>
+            <div className="classified">
+              <h1>OPERATION Algo X Nirmaan</h1>
+              <p className="mission-statement typing-effect">
+                Countdown to deployment of next-generation tactical systems.
+              </p>
+            </div>
+            
+            {/* Enhanced Radar Component */}
+            <div className="radar-container">
+              <div className="radar-background"></div>
+              <div className="radar-rings"></div>
+              <div className="radar-axis"></div>
+              <div className="radar-axis horizontal"></div>
+              <div className="radar-axis diagonal1"></div>
+              <div className="radar-axis diagonal2"></div>
+              <div className="radar-sweep">
+                <div className="radar-sweep-line"></div>
+                <div className="radar-afterglow"></div>
+              </div>
+              <div className="radar-hud">
+                <div className="radar-label radar-north">N</div>
+                <div className="radar-label radar-east">E</div>
+                <div className="radar-label radar-south">S</div>
+                <div className="radar-label radar-west">W</div>
+              </div>
+              <div className="radar-stats">
+                <div className="radar-stat">Range: <span className="radar-stat-value">100km</span></div>
+                <div className="radar-stat">Mode: <span className="radar-stat-value">Active</span></div>
+                <div className="radar-stat">Status: <span className="radar-stat-value">Online</span></div>
+              </div>
+              <div className="radar-noise"></div>
+            </div>
+            
+            <div id="coordinates-display"></div>
+            
+            {targetInfo.visible && (
+              <div id="target-info" style={{display: 'block'}}>
+                <div className="status-line"><span>TARGET ID:</span> <span>{targetInfo.id}</span></div>
+                <div className="status-line"><span>TYPE:</span> <span>{targetInfo.type}</span></div>
+                <div className="status-line"><span>DISTANCE:</span> <span>{targetInfo.distance}</span></div>
+                <div className="status-line"><span>VELOCITY:</span> <span>{targetInfo.velocity}</span></div>
+                <div className="status-line"><span>THREAT LEVEL:</span> <span>{targetInfo.threat}</span></div>
+                <div className="status-line"><span>ACTION:</span> <span className="blinking">TRACKING_</span></div>
+              </div>
+            )}
+            
+            <div className="countdown-section">
+              <h2 className="countdown-title">Time Remaining Until Deployment</h2>
+              <div className="countdown-container">
+                <div className="countdown-item">
+                  <div className="countdown-value">{countdown.days}</div>
+                  <div className="countdown-label">Days</div>
+                </div>
+                <div className="countdown-item">
+                  <div className="countdown-value">{countdown.hours}</div>
+                  <div className="countdown-label">Hours</div>
+                </div>
+                <div className="countdown-item">
+                  <div className="countdown-value">{countdown.minutes}</div>
+                  <div className="countdown-label">Minutes</div>
+                </div>
+                <div className="countdown-item">
+                  <div className="countdown-value">{countdown.seconds}</div>
+                  <div className="countdown-label">Seconds</div>
+                </div>
+              </div>
+              
+              <button className="cta-button">Request Clearance <span className="blinking">_</span></button>
+            </div>
+            
+            <div className="features">
+              <div className="feature">
+                <div className="feature-icon">⚔️</div>
+                <h3>Tactical Operations</h3>
+                <p>Cutting-edge military operations with strategic precision and advanced systems integration.</p>
+              </div>
+              <div className="feature">
+                <div className="feature-icon">🛡️</div>
+                <h3>Defense Solutions</h3>
+                <p>Next-generation defensive capabilities designed for maximum protection in hostile environments.</p>
+              </div>
+              <div className="feature">
+                <div className="feature-icon">📡</div>
+                <h3>Command & Control</h3>
+                <p>Advanced C4I systems with real-time battlefield management and secure communications.</p>
+              </div>
+            </div>
+          </main>
+          
+          <footer>
+            <p>© algoXnirmaan Military Division | TOP SECRET</p>
+            <p className="coordinates">SECURE COMMUNICATION CHANNEL ACTIVATED</p>
+          </footer>
+        </>
+      );
+    };
+    
+    // Render the React app
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>f
