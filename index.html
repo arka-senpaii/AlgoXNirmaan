@@ -3,24 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>algoXnirmaan | Military Division</title>
+  <title>algoXnirman | Military Division</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
   <style>
+    @font-face {
+      font-family: 'IMPOS50_';
+      src: url('IMPOS50_.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'TOP GUN';
+      src: url('TOP GUN.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Courier New', monospace;
+      font-family: 'IMPOS50_', 'TOP GUN', 'Courier New', monospace;
     }
     
     body {
       background-color: #0a0a0a;
       color: #33ff33;
       overflow-x: hidden;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .logo {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        padding-left: 0;
+      }
+
+      nav ul li {
+        margin-left: 0;
+        margin-bottom: 10px;
+      }
+
+      main {
+        padding: 20px 10px;
+      }
+
+      .container {
+        padding: 10px;
+      }
+
+      .classified {
+        padding: 15px;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 32px;
+        letter-spacing: 3px;
+      }
+
+      .mission-statement {
+        font-size: 16px;
+        max-width: 100%;
+      }
+
+      .countdown-container {
+        flex-wrap: wrap;
+      }
+
+      .countdown-item {
+        margin: 10px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .countdown-value {
+        font-size: 24px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .countdown-label {
+        font-size: 10px;
+      }
+
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .feature {
+        width: 90%;
+        margin-bottom: 20px;
+      }
+
+      .radar-container {
+        width: 300px;
+        height: 300px;
+        margin: 20px auto;
+      }
+
+      #coordinates-display {
+        width: 100%;
+        font-size: 12px;
+        margin-top: 20px;
+      }
+
+      #target-info {
+        width: 100%;
+        font-size: 12px;
+        margin-top: 15px;
+      }
     }
     
     #canvas-container {
@@ -84,6 +191,11 @@
       font-size: 24px;
       font-weight: bold;
       letter-spacing: 2px;
+    }
+    
+    /* Apply TOP GUN font to logo and military badge text */
+    .logo, .military-badge::after {
+      font-family: 'TOP GUN', 'IMPOS50_', 'Courier New', monospace;
     }
     
     .military-badge {
@@ -162,6 +274,9 @@
       position: relative;
       background-color: rgba(0, 10, 0, 0.7);
     }
+    .classified > * {
+      animation: blink 1s infinite;
+    }
     
     .classified::before {
       content: "CLASSIFIED";
@@ -178,6 +293,11 @@
       margin-bottom: 20px;
       text-transform: uppercase;
       letter-spacing: 5px;
+    }
+    
+    /* Apply IMPOS50_ font to main headings */
+    h1, h2, h3 {
+      font-family: 'IMPOS50_', 'TOP GUN', 'Courier New', monospace;
     }
     
     .mission-statement {
@@ -874,13 +994,13 @@
       return (
         <>
           <header>
-            <div className="logo">ALGOXNIRMAAN</div>
+            <div className="logo">ALGOXNIRMAN</div>
             <div className="military-badge"></div>
           </header>
           
           <main>
             <div className="classified">
-              <h1>OPERATION Algo X Nirmaan</h1>
+              <h1>OPERATION Algo X Nirman</h1>
               <p className="mission-statement typing-effect">
                 Countdown to deployment of next-generation tactical systems.
               </p>
@@ -969,7 +1089,7 @@
           </main>
           
           <footer>
-            <p>© algoXnirmaan Military Division | TOP SECRET</p>
+            <p>© algoXnirman Military Division | TOP SECRET</p>
             <p className="coordinates">SECURE COMMUNICATION CHANNEL ACTIVATED</p>
           </footer>
         </>
@@ -980,4 +1100,4 @@
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
-</html>f
+</html>
