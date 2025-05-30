@@ -1,1103 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>algoXnirman | Military Division</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
-  <style>
-    @font-face {
-      font-family: 'IMPOS50_';
-      src: url('IMPOS50_.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: 'TOP GUN';
-      src: url('TOP GUN.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'IMPOS50_', 'TOP GUN', 'Courier New', monospace;
-    }
-    
-    body {
-      background-color: #0a0a0a;
-      color: #33ff33;
-      overflow-x: hidden;
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .logo {
-        font-size: 20px;
-        margin-bottom: 10px;
-      }
-
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-        padding-left: 0;
-      }
-
-      nav ul li {
-        margin-left: 0;
-        margin-bottom: 10px;
-      }
-
-      main {
-        padding: 20px 10px;
-      }
-
-      .container {
-        padding: 10px;
-      }
-
-      .classified {
-        padding: 15px;
-        margin-bottom: 30px;
-      }
-
-      h1 {
-        font-size: 32px;
-        letter-spacing: 3px;
-      }
-
-      .mission-statement {
-        font-size: 16px;
-        max-width: 100%;
-      }
-
-      .countdown-container {
-        flex-wrap: wrap;
-      }
-
-      .countdown-item {
-        margin: 10px;
-        width: 60px;
-        height: 60px;
-      }
-
-      .countdown-value {
-        font-size: 24px;
-        width: 60px;
-        height: 60px;
-      }
-
-      .countdown-label {
-        font-size: 10px;
-      }
-
-      .features {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .feature {
-        width: 90%;
-        margin-bottom: 20px;
-      }
-
-      .radar-container {
-        width: 300px;
-        height: 300px;
-        margin: 20px auto;
-      }
-
-      #coordinates-display {
-        width: 100%;
-        font-size: 12px;
-        margin-top: 20px;
-      }
-
-      #target-info {
-        width: 100%;
-        font-size: 12px;
-        margin-top: 15px;
-      }
-    }
-    
-    #canvas-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
-    
-    .scan-line {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: rgba(51, 255, 51, 0.1);
-      z-index: 2;
-      animation: scanline 6s linear infinite;
-      pointer-events: none;
-    }
-    
-    @keyframes scanline {
-      0% {
-        top: 0%;
-      }
-      100% {
-        top: 100%;
-      }
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-      z-index: 2;
-    }
-    
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      border-bottom: 2px solid #33ff33;
-    }
-    
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-    
-    /* Apply TOP GUN font to logo and military badge text */
-    .logo, .military-badge::after {
-      font-family: 'TOP GUN', 'IMPOS50_', 'Courier New', monospace;
-    }
-    
-    .military-badge {
-      width: 80px;
-      height: 80px;
-      border: 2px solid #33ff33;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    
-    .military-badge::before {
-      content: "";
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      border: 1px solid #33ff33;
-      border-radius: 50%;
-    }
-    
-    .military-badge::after {
-      content: "AXN";
-      font-weight: bold;
-    }
-    
-    nav ul {
-      display: flex;
-      list-style: none;
-    }
-    
-    nav ul li {
-      margin-left: 20px;
-    }
-    
-    nav ul li a {
-      color: #33ff33;
-      text-decoration: none;
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 1px;
-      position: relative;
-      padding: 5px 0;
-    }
-    
-    nav ul li a::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background-color: #33ff33;
-      transition: width 0.3s ease;
-    }
-    
-    nav ul li a:hover::after {
-      width: 100%;
-    }
-    
-    main {
-      min-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 50px 0;
-    }
-    
-    .classified {
-      border: 2px solid #33ff33;
-      padding: 20px;
-      margin-bottom: 40px;
-      position: relative;
-      background-color: rgba(0, 10, 0, 0.7);
-    }
-    .classified > * {
-      animation: blink 1s infinite;
-    }
-    
-    .classified::before {
-      content: "CLASSIFIED";
-      position: absolute;
-      top: -10px;
-      left: 20px;
-      background-color: #0a0a0a;
-      padding: 0 10px;
-      color: #ff3333;
-    }
-    
-    h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-    }
-    
-    /* Apply IMPOS50_ font to main headings */
-    h1, h2, h3 {
-      font-family: 'IMPOS50_', 'TOP GUN', 'Courier New', monospace;
-    }
-    
-    .mission-statement {
-      margin-bottom: 40px;
-      max-width: 800px;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-    
-    .countdown-section {
-      margin-top: 40px;
-    }
-    
-    .countdown-title {
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-    
-    .countdown-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 40px;
-    }
-    
-    .countdown-item {
-      margin: 0 15px;
-      text-align: center;
-    }
-    
-    .countdown-value {
-      font-size: 36px;
-      font-weight: bold;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #33ff33;
-      margin-bottom: 10px;
-      background-color: rgba(0, 20, 0, 0.7);
-    }
-    
-    .countdown-label {
-      text-transform: uppercase;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-    
-    .cta-button {
-      background-color: transparent;
-      color: #33ff33;
-      border: 2px solid #33ff33;
-      padding: 12px 30px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .cta-button:hover {
-      background-color: rgba(51, 255, 51, 0.1);
-    }
-    
-    .cta-button::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(51, 255, 51, 0.3), transparent);
-      animation: shine 3s infinite;
-    }
-    
-    @keyframes shine {
-      0% {
-        left: -100%;
-      }
-      20% {
-        left: 100%;
-      }
-      100% {
-        left: 100%;
-      }
-    }
-    
-    .features {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin-top: 80px;
-    }
-    
-    .feature {
-      width: 300px;
-      margin-bottom: 40px;
-      padding: 20px;
-      border: 1px solid #33ff33;
-      background-color: rgba(0, 10, 0, 0.5);
-    }
-    
-    .feature-icon {
-      font-size: 40px;
-      margin-bottom: 20px;
-    }
-    
-    .feature h3 {
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    
-    footer {
-      text-align: center;
-      padding: 20px 0;
-      border-top: 2px solid #33ff33;
-      margin-top: 40px;
-    }
-    
-    .coordinates {
-      margin-top: 10px;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    .blinking {
-      animation: blink 1s infinite;
-    }
-    
-    @keyframes blink {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0;
-      }
-    }
-
-    /* Enhanced Radar Styles */
-    .radar-container {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      margin: 40px auto;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
-      border: 2px solid #33ff33;
-      background-color: rgba(0, 20, 0, 0.2);
-    }
-    
-    .radar-background {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle, rgba(0, 20, 0, 0.7) 0%, rgba(0, 10, 0, 0.9) 70%, rgba(0, 5, 0, 1) 100%),
-        repeating-radial-gradient(circle, transparent 0, transparent 20px, rgba(51, 255, 51, 0.1) 20px, rgba(51, 255, 51, 0.1) 21px);
-      border-radius: 50%;
-    }
-    
-    .radar-rings {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-    
-    .radar-ring {
-      position: absolute;
-      border: 1px solid rgba(51, 255, 51, 0.3);
-      border-radius: 50%;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-    
-    .radar-axis {
-      position: absolute;
-      background-color: rgba(51, 255, 51, 0.2);
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-      width: 1px;
-      height: 100%;
-    }
-    
-    .radar-axis.horizontal {
-      width: 100%;
-      height: 1px;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-    
-    .radar-axis.diagonal1 {
-      width: 1px;
-      height: 100%;
-      transform: translateX(-50%) rotate(45deg);
-      transform-origin: center;
-    }
-    
-    .radar-axis.diagonal2 {
-      width: 1px;
-      height: 100%;
-      transform: translateX(-50%) rotate(-45deg);
-      transform-origin: center;
-    }
-    
-    .radar-sweep {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-    
-    .radar-sweep-line {
-      position: absolute;
-      width: 50%;
-      height: 2px;
-      background: linear-gradient(to right, rgba(51, 255, 51, 0.7), rgba(51, 255, 51, 0));
-      top: 50%;
-      left: 50%;
-      transform-origin: left center;
-      animation: radarSweep 4s linear infinite;
-    }
-    
-    @keyframes radarSweep {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-    
-    .radar-afterglow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: transparent;
-      clip-path: polygon(50% 50%, 50% 0%, 60% 0%, 60% 50%);
-      animation: radarAfterglowRotate 4s linear infinite;
-      opacity: 0.3;
-      background: radial-gradient(ellipse at center, rgba(51, 255, 51, 0.4) 0%, rgba(51, 255, 51, 0) 70%);
-    }
-    
-    @keyframes radarAfterglowRotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-    
-    .radar-blip {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: #ff3333;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 5px #ff3333;
-    }
-    
-    .radar-blip.friendly {
-      background-color: #33ff33;
-      box-shadow: 0 0 5px #33ff33;
-    }
-    
-    .radar-blip.unknown {
-      background-color: #ffff33;
-      box-shadow: 0 0 5px #ffff33;
-    }
-    
-    .radar-blip.fading {
-      animation: blipFade 3s forwards;
-    }
-    
-    @keyframes blipFade {
-      0% {
-        opacity: 1;
-      }
-      70% {
-        opacity: 0.7;
-      }
-      100% {
-        opacity: 0.3;
-        transform: translate(-50%, -50%) scale(1.5);
-      }
-    }
-    
-    .radar-hud {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    
-    .radar-label {
-      position: absolute;
-      color: #33ff33;
-      font-size: 10px;
-      opacity: 0.8;
-      text-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
-    }
-    
-    .radar-north {
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    
-    .radar-east {
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-    }
-    
-    .radar-south {
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    
-    .radar-west {
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-    }
-    
-    .radar-stats {
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      font-size: 12px;
-      color: #33ff33;
-    }
-    
-    .radar-stat {
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .radar-stat-value {
-      font-weight: bold;
-    }
-    
-    .radar-noise {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92U2hXHF/C1M8uP/ZtYdiuj26UdAdQQSXQErwSOMzt/XWRWAz5GuSBIkwG1H3FabJ2OsUOUhGC6tK4EMtJO0ttC6IBD3kM0ve0tJwMdSfjZo+EEISaeTr9P3wYrGjXqyC1krcKdhMpxEnt5JetoulscpyzhXN5FRpuPHvbeQaKxFAEB6EN+cYN6xD7RYGpXpNndMmZgM5Dcs3YSNFDHUo2LGfZuukSWyUYirJAdYbF3MfqEKmjM+I2EfhA94iG3L7uKrR+GdWD73ydlIB+6hgref1QTlmgmbM3/LeX5GI1Ux1RWpgxpLuZ2+I+IjzZ8wqE4nilvQdkUdfhzI5QDWy+kw5Wgg2pGpeEVeCCA7b85BO3F9DzxB3cdqvBzWcmzbyMiqhzuYqtHRVG2y4x+KOlnyqla8AoWWpuBoYRxzXrfKuILl6SfiWCbjxoZJUaCBj1CjH7GIaDbc9kqBY3W/Rgjda1iqQcOJu2WW+76pZC9QG7M00dffe9hNnseupFL53r8F7YHSwJWUKP2q+k7RdsxyOB11n0xtOvnW4irMMFNV4H0uqwS5ExsmP9AxbDTc9JwgneAT5vTiUSm1E7BSflSt3bfa1tv8Di3R8n3Af7MNWzs49hmauE2wP+ttrq+AsWpFG2awvsuOqbipWHgtuvuaAE+A1Z/7gC9hesnr+7wqCwG8c5yAg3AL1fm8T9AZtp/bbJGwl1pNrE7RuOX7PeMRUERVaPpEs+yqeoSmuOlokqw49pgomjLeh7icHNlG19yjs6XXOMedYm5xH2YxpV2tc0Ro2jJfxC50ApuxGob7lMsxfTbeUv07TyYxpeLucEH1gNd4IKH2LAg5TdVhlCafZvpskfncCfx8pOhJzd76bJWeYFnFciwcYfubRc12Ip/ppIhA1/mSZ/RxjFDrJC5xifFjJpY2Xl5zXdguFqYyTR1zSp1Y9p+tktDYYSNflcxI0iyO4TPBdlRcpeqjK/piF5bklq77VSEaA+z8qmJTFzIWiitbnzR794USKBUaT0NTEsVjZqLaFVqJoPN9ODG70IPbfBHKK+/q/AWR0tJzYHRULOa4MP+W/HfGadZUbfw177G7j/OGbIs8TahLyynl4X4RinF793Oz+BU0saXtUHrVBFT/DnA3ctNPoGbs4hRIjTok8i+algT1lTHi4SxFvONKNrgQFAq2/gFnWMXgwffgYMJpiKYkmW3tTg3ZQ9Jq+f8XN+A5eeUKHWvJWJ2sgJ1Sop+wwhqFVijqWaJhwtD8MNlSBeWNNWTa5Z5kPZw5+LbVT99wqTdx29lMUH4OIG/D86ruKEauBjvH5xy6um/Sfj7ei6UUVk4AIl3MyD4MSSTOFgSwsH/QJWaQ5as7ZcmgBZkzjjU1UrQ74ci1gWBCSGHtuV1H2mhSnO3Wp/3fEV5a+4wz//6qy8JxjZsmxxy5+4w9CDNJY09T072iKG0EnOS0arEYgXqYnXcYHwjTtUNAcMelOd4xpkoqiTYICWFq0JSiPfPDQdnt+4/wuqcXY47QILbgAAAABJRU5ErkJggg==');
-      opacity: 0.05;
-      pointer-events: none;
-      mix-blend-mode: overlay;
-    }
-
-    /* Text information display near radar */
-    #coordinates-display {
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      margin-top: 60px;
-      color: #33ff33;
-      background-color: rgba(0, 20, 0, 0.4);
-      padding: 10px;
-      border: 1px solid #33ff33;
-      text-align: left;
-      width: 400px;
-      position: relative;
-    }
-
-    #target-info {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      margin-top: 20px;
-      color: #33ff33;
-      background-color: rgba(0, 20, 0, 0.4);
-      padding: 10px;
-      border: 1px solid #33ff33;
-      text-align: left;
-      width: 400px;
-      position: relative;
-      display: none;
-    }
-
-    .status-line {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-    }
-
-    .typing-effect {
-      overflow: hidden;
-      border-right: 2px solid #33ff33;
-      white-space: nowrap;
-      margin: 0 auto;
-      letter-spacing: 2px;
-      animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: #33ff33 }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo X Nirman - Military Hackathon 2025</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Added link or meta as requested -->
+    <link rel="icon" type="image/png" href="algoXnirmanLogoBlack.png" />
 </head>
 <body>
-  <div id="canvas-container"></div>
-  <div id="overlay"></div>
-  <div class="scan-line"></div>
-  
-  <div class="container" id="root"></div>
-
-  <script type="text/babel">
-    // React components
-    const App = () => {
-      const [countdown, setCountdown] = React.useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      });
-      
-      const [targetInfo, setTargetInfo] = React.useState({
-        visible: false,
-        id: "",
-        type: "",
-        distance: "",
-        velocity: "",
-        threat: ""
-      });
-      
-      React.useEffect(() => {
-        // Set up the countdown timer
-        const targetDate = new Date('June 1, 2025 00:00:00').getTime();
-        
-        const interval = setInterval(() => {
-          const now = new Date().getTime();
-          const distance = targetDate - now;
-          
-          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-          
-          setCountdown({ days, hours, minutes, seconds });
-          
-          if (distance < 0) {
-            clearInterval(interval);
-            setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          }
-        }, 1000);
-        
-        return () => clearInterval(interval);
-      }, []);
-      
-      // Create radar blips
-      React.useEffect(() => {
-        const radar = document.querySelector('.radar-container');
-        const radarRect = radar.getBoundingClientRect();
-        const radarCenter = radarRect.width / 2;
-        
-        // Create radar rings
-        const rings = document.querySelector('.radar-rings');
-        const ringCounts = 4;
-        
-        for (let i = 1; i <= ringCounts; i++) {
-          const ring = document.createElement('div');
-          ring.classList.add('radar-ring');
-          const size = (radarRect.width / ringCounts) * i;
-          ring.style.width = `${size}px`;
-          ring.style.height = `${size}px`;
-          rings.appendChild(ring);
-        }
-        
-        // Create initial blips
-        createInitialBlips();
-        
-        // Create random blips periodically
-        const blipInterval = setInterval(() => {
-          createRandomBlip();
-        }, 3000);
-        
-        // Clean up interval on unmount
-        return () => clearInterval(blipInterval);
-        
-        function createInitialBlips() {
-          // Add some initial blips
-          for (let i = 0; i < 5; i++) {
-            createRandomBlip();
-          }
-          
-          // Add a few friendly blips
-          for (let i = 0; i < 3; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * radarCenter * 0.8;
-            const x = Math.cos(angle) * radius + radarCenter;
-            const y = Math.sin(angle) * radius + radarCenter;
-            
-            createBlip(x, y, 'friendly');
-          }
-          
-          // Add one unknown blip
-          const angle = Math.random() * Math.PI * 2;
-          const radius = Math.random() * radarCenter * 0.6;
-          const x = Math.cos(angle) * radius + radarCenter;
-          const y = Math.sin(angle) * radius + radarCenter;
-          
-          createBlip(x, y, 'unknown');
-        }
-        
-        function createRandomBlip() {
-          const angle = Math.random() * Math.PI * 2;
-          const radius = Math.random() * radarCenter * 0.9;
-          const x = Math.cos(angle) * radius + radarCenter;
-          const y = Math.sin(angle) * radius + radarCenter;
-          
-          createBlip(x, y);
-        }
-        
-        function createBlip(x, y, type = '') {
-          const blip = document.createElement('div');
-          blip.classList.add('radar-blip');
-          
-          if (type) {
-            blip.classList.add(type);
-          }
-          
-          blip.style.left = `${x}px`;
-          blip.style.top = `${y}px`;
-          
-          // Create random ID for the blip
-          const blipId = `TGT-${Math.floor(Math.random() * 9000) + 1000}`;
-          blip.dataset.id = blipId;
-          
-          // Create random threat level
-          const threatLevels = ['LOW', 'MEDIUM', 'HIGH', 'UNKNOWN'];
-          const threatLevel = threatLevels[Math.floor(Math.random() * threatLevels.length)];
-          blip.dataset.threat = threatLevel;
-          
-          // Create random distance
-          const distance = (Math.random() * 50 + 10).toFixed(1);
-          blip.dataset.distance = distance;
-          
-          // Create random velocity
-          const velocity = (Math.random() * 800 + 100).toFixed(1);
-          blip.dataset.velocity = velocity;
-          
-          // Create blip type
-          const blipTypes = ['AIR', 'NAVAL', 'GROUND', 'UNKNOWN'];
-          const blipType = type === 'friendly' ? 'ALLIED' : blipTypes[Math.floor(Math.random() * blipTypes.length)];
-          blip.dataset.type = blipType;
-          
-          radar.appendChild(blip);
-          
-          // Add click event to show target info
-          blip.addEventListener('click', () => {
-            setTargetInfo({
-              visible: true,
-              id: blipId,
-              type: blipType,
-              distance: `${distance} KM`,
-              velocity: `${velocity} KM/H`,
-              threat: threatLevel
-            });
-            
-            // Highlight selected blip
-            document.querySelectorAll('.radar-blip').forEach(b => b.style.boxShadow = '');
-            blip.style.boxShadow = '0 0 10px #ffffff';
-          });
-          
-          // Randomly make some blips fade and disappear
-          if (Math.random() > 0.7) {
-            blip.classList.add('fading');
-            setTimeout(() => {
-              blip.remove();
-            }, 3000);
-          }
-        }
-      }, [setTargetInfo]);
-      
-      // Three.js setup for background
-      React.useEffect(() => {
-        // Create a scene
-        const scene = new THREE.Scene();
-        
-        // Create a camera
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
-        
-        // Create a renderer
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-        
-        // Create grid
-        const gridHelper = new THREE.GridHelper(20, 20, 0x33ff33, 0x33ff33);
-        gridHelper.position.y = -2;
-        scene.add(gridHelper);
-        
-        // Create particles for a starfield effect
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 1000;
-        
-        const posArray = new Float32Array(particlesCount * 3);
-        
-        for (let i = 0; i < particlesCount * 3; i++) {
-          posArray[i] = (Math.random() - 0.5) * 30;
-        }
-        
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        
-        const particlesMaterial = new THREE.PointsMaterial({
-          size: 0.05,
-          color: 0x33ff33
-        });
-        
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-        
-        // Animation loop
-        const animate = () => {
-          requestAnimationFrame(animate);
-          particlesMesh.rotation.y += 0.0005;
-          renderer.render(scene, camera);
-        };
-        
-        animate();
-        
-        // Handle window resize
-        const handleResize = () => {
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-        
-        window.addEventListener('resize', handleResize);
-        
-        return () => {
-          window.removeEventListener('resize', handleResize);
-          document.getElementById('canvas-container').removeChild(renderer.domElement);
-        };
-      }, []);
-      
-      // Coordinates display and update
-      React.useEffect(() => {
-        let coords = document.getElementById('coordinates-display');
-        
-        const updateCoordinates = () => {
-          const lat = (Math.random() * 180 - 90).toFixed(6);
-          const long = (Math.random() * 360 - 180).toFixed(6);
-          const altitude = Math.floor(Math.random() * 10000);
-          const bearing = Math.floor(Math.random() * 360);
-          const speed = Math.floor(Math.random() * 900) + 100;
-          const contacts = Math.floor(Math.random() * 12) + 1;
-          
-          coords.innerHTML = `
-            <div class="status-line"><span>LAT:</span> <span>${lat}°</span></div>
-            <div class="status-line"><span>LONG:</span> <span>${long}°</span></div>
-            <div class="status-line"><span>ALTITUDE:</span> <span>${altitude} M</span></div>
-            <div class="status-line"><span>BEARING:</span> <span>${bearing}°</span></div>
-            <div class="status-line"><span>SPEED:</span> <span>${speed} KM/H</span></div>
-            <div class="status-line"><span>ACTIVE CONTACTS:</span> <span>${contacts}</span></div>
-            <div class="status-line"><span>SYSTEM STATUS:</span> <span>OPERATIONAL</span></div>
-          `;
-        };
-        
-        updateCoordinates();
-        const coordInterval = setInterval(updateCoordinates, 3000);
-        
-        return () => clearInterval(coordInterval);
-      }, []);
-
-      return (
-        <>
-          <header>
-            <div className="logo">ALGOXNIRMAN</div>
-            <div className="military-badge"></div>
-          </header>
-          
-          <main>
-            <div className="classified">
-              <h1>OPERATION Algo X Nirman</h1>
-              <p className="mission-statement typing-effect">
-                Countdown to deployment of next-generation tactical systems.
-              </p>
-            </div>
-            
-            {/* Enhanced Radar Component */}
-            <div className="radar-container">
-              <div className="radar-background"></div>
-              <div className="radar-rings"></div>
-              <div className="radar-axis"></div>
-              <div className="radar-axis horizontal"></div>
-              <div className="radar-axis diagonal1"></div>
-              <div className="radar-axis diagonal2"></div>
-              <div className="radar-sweep">
-                <div className="radar-sweep-line"></div>
-                <div className="radar-afterglow"></div>
-              </div>
-              <div className="radar-hud">
-                <div className="radar-label radar-north">N</div>
-                <div className="radar-label radar-east">E</div>
-                <div className="radar-label radar-south">S</div>
-                <div className="radar-label radar-west">W</div>
-              </div>
-              <div className="radar-stats">
-                <div className="radar-stat">Range: <span className="radar-stat-value">100km</span></div>
-                <div className="radar-stat">Mode: <span className="radar-stat-value">Active</span></div>
-                <div className="radar-stat">Status: <span className="radar-stat-value">Online</span></div>
-              </div>
-              <div className="radar-noise"></div>
-            </div>
-            
-            <div id="coordinates-display"></div>
-            
-            {targetInfo.visible && (
-              <div id="target-info" style={{display: 'block'}}>
-                <div className="status-line"><span>TARGET ID:</span> <span>{targetInfo.id}</span></div>
-                <div className="status-line"><span>TYPE:</span> <span>{targetInfo.type}</span></div>
-                <div className="status-line"><span>DISTANCE:</span> <span>{targetInfo.distance}</span></div>
-                <div className="status-line"><span>VELOCITY:</span> <span>{targetInfo.velocity}</span></div>
-                <div className="status-line"><span>THREAT LEVEL:</span> <span>{targetInfo.threat}</span></div>
-                <div className="status-line"><span>ACTION:</span> <span className="blinking">TRACKING_</span></div>
-              </div>
-            )}
-            
-            <div className="countdown-section">
-              <h2 className="countdown-title">Time Remaining Until Deployment</h2>
-              <div className="countdown-container">
-                <div className="countdown-item">
-                  <div className="countdown-value">{countdown.days}</div>
-                  <div className="countdown-label">Days</div>
-                </div>
-                <div className="countdown-item">
-                  <div className="countdown-value">{countdown.hours}</div>
-                  <div className="countdown-label">Hours</div>
-                </div>
-                <div className="countdown-item">
-                  <div className="countdown-value">{countdown.minutes}</div>
-                  <div className="countdown-label">Minutes</div>
-                </div>
-                <div className="countdown-item">
-                  <div className="countdown-value">{countdown.seconds}</div>
-                  <div className="countdown-label">Seconds</div>
-                </div>
-              </div>
-              
-              <button className="cta-button">Request Clearance <span className="blinking">_</span></button>
-            </div>
-            
-            <div className="features">
-              <div className="feature">
-                <div className="feature-icon">⚔️</div>
-                <h3>Tactical Operations</h3>
-                <p>Cutting-edge military operations with strategic precision and advanced systems integration.</p>
-              </div>
-              <div className="feature">
-                <div className="feature-icon">🛡️</div>
-                <h3>Defense Solutions</h3>
-                <p>Next-generation defensive capabilities designed for maximum protection in hostile environments.</p>
-              </div>
-              <div className="feature">
-                <div className="feature-icon">📡</div>
-                <h3>Command & Control</h3>
-                <p>Advanced C4I systems with real-time battlefield management and secure communications.</p>
-              </div>
-            </div>
-          </main>
-          
-          <footer>
-            <p>© algoXnirman Military Division | TOP SECRET</p>
-            <p className="coordinates">SECURE COMMUNICATION CHANNEL ACTIVATED</p>
-          </footer>
-        </>
-      );
-    };
+    <div id="loading-page">
+        <div id="loading-logo-container">
+            <img id="loading-logo" src="algoXnirmanLogoBlack.png" alt="Loading Logo">
+        </div>
+    </div>
+    <!-- Particle Background -->
+    <div id="particles-container"></div>
     
-    // Render the React app
-    ReactDOM.render(<App />, document.getElementById('root'));
-  </script>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="algoXnirmanLogoBlack.png" alt="AlgoXnirman Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+                <span class="logo-text">ALGO<span class="highlight">X</span>NIRMAN</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Mission</a>
+                <a href="#about" class="nav-link">Intel</a>
+                <a href="#tracks" class="nav-link">Tracks</a>
+                <a href="#details" class="nav-link">Operations</a>
+                <a href="#contact" class="nav-link">Command</a>
+                <button class="sponsor-btn-nav">SPONSOR US</button>
+                <div class="music-player">
+                    <audio id="nav-audio" src="Mission Impossible Dead Reckoning Part One - Opening Intro HD.mp3" preload="auto"></audio>
+                    <button id="play-pause-btn" aria-label="Play/Pause Music" title="Play/Pause Music">▶️</button>
+                </div>
+            </div>
+            <div id="mobile-nav-toggle" aria-label="Toggle Navigation Menu" role="button" tabindex="0">&#9776;</div>
+        </div>
+    </nav>
+    <!-- AlgoX Image in Body -->
+    <section style="text-align:center; margin: 20px 0;">
+    </section>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <img src="logo.png" alt="algoXnirman Logo" style="height: 150px; vertical-align: middle;">
+                    <span class="title-line2">HACKATHON 2025</span>
+                </h1>
+                <p class="hero-subtitle">A 30-hour national-level hackathon by Vectorix Community. Elite Developers. Strategic Coding. Victory Awaits.</p>
+                <div class="hero-date">
+                    <span class="date-label">DEPLOYMENT DATE</span>
+                    <span class="date-value">06-07 SEPTEMBER 2025</span>
+                </div>
+                
+                <!-- Countdown Timer -->
+                <div class="countdown-container">
+                    <div class="countdown-title">MISSION COUNTDOWN</div>
+                    <div class="countdown-timer">
+                        <div class="time-unit">
+                            <span class="time-value" id="days">00</span>
+                            <span class="time-label">DAYS</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="hours">00</span>
+                            <span class="time-label">HOURS</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="minutes">00</span>
+                            <span class="time-label">MINUTES</span>
+                        </div>
+                        <div class="time-unit">
+                            <span class="time-value" id="seconds">00</span>
+                            <span class="time-label">SECONDS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button class="cta-btn primary">ENLIST NOW</button>
+                    <button class="cta-btn secondary">MISSION BRIEFING</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div id="three-container"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="section-container">
+            <h2 class="section-title">MISSION PARAMETERS</h2>
+            <div class="mission-description">
+                <p>Algo-X-Nirman is a 30-hour national-level hackathon organized by the <strong>Vectorix Community</strong>. It's a high-energy innovation sprint where tech enthusiasts come together to build cutting-edge solutions to real-world challenges. From brainstorming to prototyping, this event celebrates the spirit of creation and collaboration.</p>
+                <p>The hackathon aims to foster innovation, nurture problem-solving skills, and encourage participants to step beyond conventional boundaries. It provides a platform for bright minds to explore emerging technologies, push their limits, and transform bold ideas into impactful solutions.</p>
+                <p>Algo-X-Nirman is open to <strong>students, developers, and tech enthusiasts</strong> from diverse backgrounds. Whether you're a seasoned coder or a first-time hacker with a passion for innovation, this event welcomes all who are eager to learn, create, and compete in a dynamic and inclusive environment.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>30-Hour Combat</h3>
+                    <p>Intensive coding warfare where innovation meets determination in a sprint to victory</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Real-World Missions</h3>
+                    <p>Tackle cutting-edge challenges that push the boundaries of conventional solutions</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🤝</div>
+                    <h3>Collaborative Force</h3>
+                    <p>Unite diverse minds in an inclusive environment that celebrates every skill level</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Innovation Sprint</h3>
+                    <p>Transform bold ideas into impactful prototypes through rapid development cycles</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracks Section -->
+    <section id="tracks" class="tracks-section">
+        <div class="section-container">
+            <h2 class="section-title">COMBAT TRACKS</h2>
+            <div class="tracks-intro">
+                <p>Choose your battlefield and deploy your skills across multiple specialized combat zones</p>
+            </div>
+            <div class="tracks-grid">
+                <div class="track-card" data-track="ai">
+                    <div class="track-header">
+                        <div class="track-icon">🤖</div>
+                        <h3>AI/ML WARFARE</h3>
+                        <span class="track-badge">ADVANCED</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Deploy artificial intelligence and machine learning algorithms to solve complex problems. Build intelligent systems that can learn, adapt, and make decisions.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">TensorFlow</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">OpenAI</span>
+                            <span class="tech-tag">Computer Vision</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="track-card" data-track="web">
+                    <div class="track-header">
+                        <div class="track-icon">🌐</div>
+                        <h3>WEB DEVELOPMENT</h3>
+                        <span class="track-badge">POPULAR</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Create dynamic, responsive web applications that deliver exceptional user experiences. From frontend magic to backend power.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Next.js</span>
+                            <span class="tech-tag">GraphQL</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="track-card" data-track="mobile">
+                    <div class="track-header">
+                        <div class="track-icon">📱</div>
+                        <h3>MOBILE ASSAULT</h3>
+                        <span class="track-badge">GROWING</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Develop powerful mobile applications that reach users anywhere, anytime. Native performance with cross-platform reach.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">Flutter</span>
+                            <span class="tech-tag">React Native</span>
+                            <span class="tech-tag">Swift</span>
+                            <span class="tech-tag">Kotlin</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="track-card" data-track="blockchain">
+                    <div class="track-header">
+                        <div class="track-icon">⛓️</div>
+                        <h3>BLOCKCHAIN FRONTIER</h3>
+                        <span class="track-badge">EMERGING</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Build decentralized applications and smart contracts that reshape how we think about trust and value exchange.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">Solidity</span>
+                            <span class="tech-tag">Web3.js</span>
+                            <span class="tech-tag">Ethereum</span>
+                            <span class="tech-tag">DeFi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="track-card" data-track="iot">
+                    <div class="track-header">
+                        <div class="track-icon">🔌</div>
+                        <h3>IoT NETWORKS</h3>
+                        <span class="track-badge">STRATEGIC</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Connect the physical and digital worlds through intelligent IoT solutions. Build the infrastructure of tomorrow.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">Arduino</span>
+                            <span class="tech-tag">Raspberry Pi</span>
+                            <span class="tech-tag">MQTT</span>
+                            <span class="tech-tag">Edge Computing</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="track-card" data-track="cybersec">
+                    <div class="track-header">
+                        <div class="track-icon">🛡️</div>
+                        <h3>CYBERSECURITY</h3>
+                        <span class="track-badge">CRITICAL</span>
+                    </div>
+                    <div class="track-content">
+                        <p>Defend digital territories and create secure systems. Build the armor that protects our connected world.</p>
+                        <div class="track-tech">
+                            <span class="tech-tag">Penetration Testing</span>
+                            <span class="tech-tag">Cryptography</span>
+                            <span class="tech-tag">Security Audit</span>
+                            <span class="tech-tag">Threat Detection</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Details -->
+    <section id="details" class="details-section">
+        <div class="section-container">
+            <h2 class="section-title">OPERATION DETAILS</h2>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <h3>📅 Timeline</h3>
+                    <p>September 6-7, 2025<br>30 Hours of Intense Innovation</p>
+                </div>
+                <div class="detail-item">
+                    <h3>🎖️ Combat Tracks</h3>
+                    <p>AI/ML • Web Development • Mobile<br>Blockchain • IoT • Cybersecurity</p>
+                </div>
+                <div class="detail-item">
+                    <h3>💰 Victory Spoils</h3>
+                    <p>₹2,50,000+ Prize Pool<br>Internships & Mentorship</p>
+                </div>
+                <div class="detail-item">
+                    <h3>👥 Squad Formation</h3>
+                    <p>2-4 members per team<br>All skill levels welcome</p>
+                </div>
+                <div class="detail-item">
+                    <h3>🏛️ Command Base</h3>
+                    <p>National Level Event<br>Organized by Vectorix Community</p>
+                </div>
+                <div class="detail-item">
+                    <h3>🎯 Mission Scope</h3>
+                    <p>Real-world Challenges<br>Industry-relevant Problems</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Line Of Control Section -->
+    <section id="line-of-control" class="line-of-control-section">
+        <div class="section-container">
+            <h2 class="section-title">LINE OF CONTROL</h2>
+            <div class="loc-grid">
+                <div class="loc-card">
+                    <img src="organizer1.png" alt="Organizer 1" class="loc-profile-image">
+                    <h3>Srinjan Ghosh</h3>
+                    <p>Founder of Vectorix & Lead Organizer</p>
+                    <div class="loc-socials">
+                        <a href="#" aria-label="LinkedIn"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+                        <a href="#" aria-label="Twitter"><img src="twitter-icon.png" alt="Twitter"></a>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <img src="organizer2.png" alt="Organizer 2" class="loc-profile-image">
+                    <h3>Arka Mahajan</h3>
+                    <p>Co-Founder of Vectorix & Lead Orgainzer</p>
+                    <div class="loc-socials">
+                        <a href="#" aria-label="LinkedIn"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+                        <a href="#" aria-label="Twitter"><img src="twitter-icon.png" alt="Twitter"></a>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <img src="organizer3.png" alt="Organizer 3" class="loc-profile-image">
+                    <h3>Debmalya Das</h3>
+                    <p>Co-Founder of Vectorix & Lead Orgainzer</p>
+                    <div class="loc-socials">
+                        <a href="#" aria-label="LinkedIn"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+                        <a href="#" aria-label="Twitter"><img src="twitter-icon.png" alt="Twitter"></a>
+                    </div>
+                </div>
+                <div class="loc-card">
+                    <img src="organizer4.png" alt="Organizer 4" class="loc-profile-image">
+                    <h3>Pradhunya Gawande</h3>
+                    <p>Logistics Coordinator</p>
+                    <div class="loc-socials">
+                        <a href="#" aria-label="LinkedIn"><img src="linkedin-icon.png" alt="LinkedIn"></a>
+                        <a href="#" aria-label="Twitter"><img src="twitter-icon.png" alt="Twitter"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Carousel Section -->
+    <section id="image-carousel" class="image-carousel-section">
+        <div class="section-container">
+            <h2 class="section-title">OUR PARTNERS & COLLABORATORS</h2>
+            <div class="carousel-container">
+                <div class="carousel-slide active">
+                    <img src="UEM WHITE.PNG" alt="UEM Venue Partner" class="carousel-image">
+                    <p class="carousel-caption">Venue Partner</p>
+                </div>
+                <div class="carousel-slide">
+                    <img src="BlackFull.png" alt="BlackFull Collaboration" class="carousel-image">
+                    <p class="carousel-caption">Collaboration</p>
+                </div>
+                <div class="carousel-slide">
+                    <img src="ieeembwhitepng.png" alt="IEEE MB Collaboration" class="carousel-image">
+                    <p class="carousel-caption">Collaboration</p>
+                </div>
+                <div class="carousel-slide">
+                    <img src="CSIEEEwhite.png" alt="CS IEEE Collaboration" class="carousel-image">
+                    <p class="carousel-caption">Collaboration</p>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button id="prev-btn" aria-label="Previous Slide">&#10094;</button>
+                <button id="next-btn" aria-label="Next Slide">&#10095;</button>
+            </div>
+        </div>
+
+
+    <!-- Sponsor Section -->
+    <section class="sponsor-section">
+        <div class="section-container">
+            <div class="sponsor-content">
+                <h2 class="sponsor-title">JOIN THE ALLIANCE</h2>
+                <p class="sponsor-text">Partner with us to fuel the next generation of digital warriors</p>
+                <button class="sponsor-btn-main">SPONSOR US NOW</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="section-container">
+            <h2 class="section-title">COMMAND CENTER</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>📧 Communications</h3>
+                    <p>vectorixcom@gmail.com</p>
+                </div>
+                <div class="contact-item">
+                    <h3>📱 Direct Line</h3>
+                    <p>+91 70034-13255 / +91 70473-87377 / +91 95721-70235</p>
+                </div>
+                <div class="contact-item">
+                    <h3>🌐 Digital HQ</h3>
+                    <p>
+                        <a href="https://www.linkedin.com/company/algoxnirman" target="_blank" rel="noopener noreferrer" style="color: grey; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-right: 12px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm7.5 0h4.8v2.2h.1c.7-1.3 2.4-2.7 4.9-2.7 5.2 0 6.2 3.4 6.2 7.8V24h-5v-7.5c0-1.8 0-4.1-2.5-4.1-2.5 0-2.9 2-2.9 4v7.6h-5V8z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.instagram.com/algoxnirman" target="_blank" rel="noopener noreferrer" style="color: grey; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zm8.75 2.25a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+                            </svg>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
